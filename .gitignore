@@ -1,0 +1,38 @@
+# Xcode
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+DerivedData/
+build/
+*.moved-aside
+*.swp
+*~.nib
+
+# macOS
+.DS_Store
+.__MACOSX
+__MACOSX/
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Misc
+*.log
+*.tmp
