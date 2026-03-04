@@ -20,13 +20,56 @@
 		223C6D572F54020700BCC29D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D562F54020700BCC29D /* FirebaseFirestoreSwift */; };
 		223C6D592F54020700BCC29D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D582F54020700BCC29D /* FirebaseMessaging */; };
 		2285588D2F5408210034383D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2285588C2F5408210034383D /* GoogleService-Info.plist */; };
-		2285588F2F540D380034383D /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2285588E2F540D380034383D /* Product.swift */; };
-		228558912F540D770034383D /* FirestoreSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228558902F540D770034383D /* FirestoreSeeder.swift */; };
-		228558932F540E7A0034383D /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228558922F540E7A0034383D /* ProductViewModel.swift */; };
-		228558952F5410CD0034383D /* ProductCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228558942F5410CD0034383D /* ProductCard.swift */; };
-		228558972F542D560034383D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228558962F542D560034383D /* Theme.swift */; };
-		228558992F542E2D0034383D /* ExploreHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228558982F542E2D0034383D /* ExploreHeroView.swift */; };
-		2285589D2F54318A0034383D /* ExploreProductsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2285589C2F54318A0034383D /* ExploreProductsView.swift */; };
+		BB0000010000000000000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000001 /* AppRouter.swift */; };
+		BB0000010000000000000002 /* FirebaseAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000002 /* FirebaseAuthRepository.swift */; };
+		BB0000010000000000000003 /* FirebaseCartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000003 /* FirebaseCartRepository.swift */; };
+		BB0000010000000000000004 /* FirebaseCouponRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000004 /* FirebaseCouponRepository.swift */; };
+		BB0000010000000000000005 /* FirebaseDealRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000005 /* FirebaseDealRepository.swift */; };
+		BB0000010000000000000006 /* FirebaseFavoritesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000006 /* FirebaseFavoritesRepository.swift */; };
+		BB0000010000000000000007 /* FirebaseOrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000007 /* FirebaseOrderRepository.swift */; };
+		BB0000010000000000000008 /* FirebaseProductRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000008 /* FirebaseProductRepository.swift */; };
+		BB0000010000000000000009 /* FirebaseReviewRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000009 /* FirebaseReviewRepository.swift */; };
+		BB000001000000000000000A /* FirebaseUserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000A /* FirebaseUserRepository.swift */; };
+		BB000001000000000000000B /* FirestoreSeeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000B /* FirestoreSeeder.swift */; };
+		BB000001000000000000000C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000C /* APIClient.swift */; };
+		BB000001000000000000000D /* CurrencyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000D /* CurrencyService.swift */; };
+		BB000001000000000000000E /* MockPaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000E /* MockPaymentService.swift */; };
+		BB000001000000000000000F /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000000F /* Address.swift */; };
+		BB0000010000000000000010 /* CartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000010 /* CartItem.swift */; };
+		BB0000010000000000000011 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000011 /* Category.swift */; };
+		BB0000010000000000000012 /* Coupon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000012 /* Coupon.swift */; };
+		BB0000010000000000000013 /* CurrencyRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000013 /* CurrencyRate.swift */; };
+		BB0000010000000000000014 /* Deal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000014 /* Deal.swift */; };
+		BB0000010000000000000015 /* FavoriteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000015 /* FavoriteItem.swift */; };
+		BB0000010000000000000016 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000016 /* Order.swift */; };
+		BB0000010000000000000017 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000017 /* Product.swift */; };
+		BB0000010000000000000018 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000018 /* Review.swift */; };
+		BB0000010000000000000019 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000019 /* UserProfile.swift */; };
+		BB000001000000000000001A /* Repositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001A /* Repositories.swift */; };
+		BB000001000000000000001B /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001B /* AuthViewModel.swift */; };
+		BB000001000000000000001C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001C /* LoginView.swift */; };
+		BB000001000000000000001D /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001D /* SignUpView.swift */; };
+		BB000001000000000000001E /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001E /* CartView.swift */; };
+		BB000001000000000000001F /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000001F /* CartViewModel.swift */; };
+		BB0000010000000000000020 /* AddressFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000020 /* AddressFormView.swift */; };
+		BB0000010000000000000021 /* CheckoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000021 /* CheckoutView.swift */; };
+		BB0000010000000000000022 /* CheckoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000022 /* CheckoutViewModel.swift */; };
+		BB0000010000000000000023 /* OrderReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000023 /* OrderReviewView.swift */; };
+		BB0000010000000000000024 /* OrderSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000024 /* OrderSuccessView.swift */; };
+		BB0000010000000000000025 /* PaymentFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000025 /* PaymentFormView.swift */; };
+		BB0000010000000000000026 /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000026 /* SharedComponents.swift */; };
+		BB0000010000000000000027 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000027 /* FavoritesView.swift */; };
+		BB0000010000000000000028 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000028 /* FavoritesViewModel.swift */; };
+		BB0000010000000000000029 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000029 /* HomeView.swift */; };
+		BB000001000000000000002A /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002A /* HomeViewModel.swift */; };
+		BB000001000000000000002B /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002B /* OrderHistoryView.swift */; };
+		BB000001000000000000002C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002C /* ProfileView.swift */; };
+		BB000001000000000000002D /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002D /* ProfileViewModel.swift */; };
+		BB000001000000000000002E /* ProductDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002E /* ProductDetailView.swift */; };
+		BB000001000000000000002F /* ProductDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000002F /* ProductDetailViewModel.swift */; };
+		BB0000010000000000000030 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000030 /* ShopView.swift */; };
+		BB0000010000000000000031 /* ShopViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000031 /* ShopViewModel.swift */; };
+		BB0000010000000000000032 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000032 /* AppTheme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,13 +102,56 @@
 		223C6D412F53FB7600BCC29D /* ELORAUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ELORAUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2285588B2F54058E0034383D /* ELORA.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ELORA.entitlements; sourceTree = "<group>"; };
 		2285588C2F5408210034383D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2285588E2F540D380034383D /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
-		228558902F540D770034383D /* FirestoreSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreSeeder.swift; sourceTree = "<group>"; };
-		228558922F540E7A0034383D /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
-		228558942F5410CD0034383D /* ProductCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCard.swift; sourceTree = "<group>"; };
-		228558962F542D560034383D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		228558982F542E2D0034383D /* ExploreHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreHeroView.swift; sourceTree = "<group>"; };
-		2285589C2F54318A0034383D /* ExploreProductsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreProductsView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000001 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		AA0000010000000000000002 /* FirebaseAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000003 /* FirebaseCartRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCartRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000004 /* FirebaseCouponRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCouponRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000005 /* FirebaseDealRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDealRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000006 /* FirebaseFavoritesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFavoritesRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000007 /* FirebaseOrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseOrderRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000008 /* FirebaseProductRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProductRepository.swift; sourceTree = "<group>"; };
+		AA0000010000000000000009 /* FirebaseReviewRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseReviewRepository.swift; sourceTree = "<group>"; };
+		AA000001000000000000000A /* FirebaseUserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUserRepository.swift; sourceTree = "<group>"; };
+		AA000001000000000000000B /* FirestoreSeeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreSeeder.swift; sourceTree = "<group>"; };
+		AA000001000000000000000C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		AA000001000000000000000D /* CurrencyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyService.swift; sourceTree = "<group>"; };
+		AA000001000000000000000E /* MockPaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPaymentService.swift; sourceTree = "<group>"; };
+		AA000001000000000000000F /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		AA0000010000000000000010 /* CartItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItem.swift; sourceTree = "<group>"; };
+		AA0000010000000000000011 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		AA0000010000000000000012 /* Coupon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coupon.swift; sourceTree = "<group>"; };
+		AA0000010000000000000013 /* CurrencyRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyRate.swift; sourceTree = "<group>"; };
+		AA0000010000000000000014 /* Deal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deal.swift; sourceTree = "<group>"; };
+		AA0000010000000000000015 /* FavoriteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteItem.swift; sourceTree = "<group>"; };
+		AA0000010000000000000016 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		AA0000010000000000000017 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		AA0000010000000000000018 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
+		AA0000010000000000000019 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		AA000001000000000000001A /* Repositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repositories.swift; sourceTree = "<group>"; };
+		AA000001000000000000001B /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		AA000001000000000000001C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		AA000001000000000000001D /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		AA000001000000000000001E /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		AA000001000000000000001F /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		AA0000010000000000000020 /* AddressFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressFormView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000021 /* CheckoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000022 /* CheckoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewModel.swift; sourceTree = "<group>"; };
+		AA0000010000000000000023 /* OrderReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderReviewView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000024 /* OrderSuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSuccessView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000025 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000026 /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedComponents.swift; sourceTree = "<group>"; };
+		AA0000010000000000000027 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000028 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
+		AA0000010000000000000029 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AA000001000000000000002A /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		AA000001000000000000002B /* OrderHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
+		AA000001000000000000002C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		AA000001000000000000002D /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		AA000001000000000000002E /* ProductDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailView.swift; sourceTree = "<group>"; };
+		AA000001000000000000002F /* ProductDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewModel.swift; sourceTree = "<group>"; };
+		AA0000010000000000000030 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		AA0000010000000000000031 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
+		AA0000010000000000000032 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,15 +211,12 @@
 				2285588B2F54058E0034383D /* ELORA.entitlements */,
 				223C6D242F53FB7000BCC29D /* ELORAApp.swift */,
 				223C6D262F53FB7000BCC29D /* ContentView.swift */,
+				CC0000010000000000000001 /* App */,
+				CC0000010000000000000002 /* Data */,
+				CC0000010000000000000006 /* Domain */,
+				CC0000010000000000000009 /* Presentation */,
 				223C6D282F53FB7500BCC29D /* Assets.xcassets */,
 				223C6D2A2F53FB7500BCC29D /* Preview Content */,
-				2285588E2F540D380034383D /* Product.swift */,
-				228558902F540D770034383D /* FirestoreSeeder.swift */,
-				228558922F540E7A0034383D /* ProductViewModel.swift */,
-				228558942F5410CD0034383D /* ProductCard.swift */,
-				228558962F542D560034383D /* Theme.swift */,
-				228558982F542E2D0034383D /* ExploreHeroView.swift */,
-				2285589C2F54318A0034383D /* ExploreProductsView.swift */,
 			);
 			path = ELORA;
 			sourceTree = "<group>";
@@ -161,6 +244,196 @@
 				223C6D412F53FB7600BCC29D /* ELORAUITestsLaunchTests.swift */,
 			);
 			path = ELORAUITests;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000001 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000001 /* AppRouter.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000002 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CC0000010000000000000003 /* Repositories */,
+				CC0000010000000000000004 /* Seeders */,
+				CC0000010000000000000005 /* Services */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000003 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000002 /* FirebaseAuthRepository.swift */,
+				AA0000010000000000000003 /* FirebaseCartRepository.swift */,
+				AA0000010000000000000004 /* FirebaseCouponRepository.swift */,
+				AA0000010000000000000005 /* FirebaseDealRepository.swift */,
+				AA0000010000000000000006 /* FirebaseFavoritesRepository.swift */,
+				AA0000010000000000000007 /* FirebaseOrderRepository.swift */,
+				AA0000010000000000000008 /* FirebaseProductRepository.swift */,
+				AA0000010000000000000009 /* FirebaseReviewRepository.swift */,
+				AA000001000000000000000A /* FirebaseUserRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000004 /* Seeders */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000000B /* FirestoreSeeder.swift */,
+			);
+			path = Seeders;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000005 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000000C /* APIClient.swift */,
+				AA000001000000000000000D /* CurrencyService.swift */,
+				AA000001000000000000000E /* MockPaymentService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000006 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				CC0000010000000000000007 /* Models */,
+				CC0000010000000000000008 /* Protocols */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000007 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000000F /* Address.swift */,
+				AA0000010000000000000010 /* CartItem.swift */,
+				AA0000010000000000000011 /* Category.swift */,
+				AA0000010000000000000012 /* Coupon.swift */,
+				AA0000010000000000000013 /* CurrencyRate.swift */,
+				AA0000010000000000000014 /* Deal.swift */,
+				AA0000010000000000000015 /* FavoriteItem.swift */,
+				AA0000010000000000000016 /* Order.swift */,
+				AA0000010000000000000017 /* Product.swift */,
+				AA0000010000000000000018 /* Review.swift */,
+				AA0000010000000000000019 /* UserProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000008 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000001A /* Repositories.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000009 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				CC000001000000000000000A /* Auth */,
+				CC000001000000000000000B /* Cart */,
+				CC000001000000000000000C /* Checkout */,
+				CC000001000000000000000D /* Components */,
+				CC000001000000000000000E /* Favorites */,
+				CC000001000000000000000F /* Home */,
+				CC0000010000000000000010 /* Profile */,
+				CC0000010000000000000011 /* Shop */,
+				CC0000010000000000000012 /* Theme */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000A /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000001B /* AuthViewModel.swift */,
+				AA000001000000000000001C /* LoginView.swift */,
+				AA000001000000000000001D /* SignUpView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000B /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000001E /* CartView.swift */,
+				AA000001000000000000001F /* CartViewModel.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000C /* Checkout */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000020 /* AddressFormView.swift */,
+				AA0000010000000000000021 /* CheckoutView.swift */,
+				AA0000010000000000000022 /* CheckoutViewModel.swift */,
+				AA0000010000000000000023 /* OrderReviewView.swift */,
+				AA0000010000000000000024 /* OrderSuccessView.swift */,
+				AA0000010000000000000025 /* PaymentFormView.swift */,
+			);
+			path = Checkout;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000026 /* SharedComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000E /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000027 /* FavoritesView.swift */,
+				AA0000010000000000000028 /* FavoritesViewModel.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
+		CC000001000000000000000F /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000029 /* HomeView.swift */,
+				AA000001000000000000002A /* HomeViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000010 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000002B /* OrderHistoryView.swift */,
+				AA000001000000000000002C /* ProfileView.swift */,
+				AA000001000000000000002D /* ProfileViewModel.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000011 /* Shop */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001000000000000002E /* ProductDetailView.swift */,
+				AA000001000000000000002F /* ProductDetailViewModel.swift */,
+				AA0000010000000000000030 /* ShopView.swift */,
+				AA0000010000000000000031 /* ShopViewModel.swift */,
+			);
+			path = Shop;
+			sourceTree = "<group>";
+		};
+		CC0000010000000000000012 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				AA0000010000000000000032 /* AppTheme.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,15 +577,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				228558992F542E2D0034383D /* ExploreHeroView.swift in Sources */,
 				223C6D272F53FB7000BCC29D /* ContentView.swift in Sources */,
 				223C6D252F53FB7000BCC29D /* ELORAApp.swift in Sources */,
-				2285588F2F540D380034383D /* Product.swift in Sources */,
-				228558912F540D770034383D /* FirestoreSeeder.swift in Sources */,
-				228558932F540E7A0034383D /* ProductViewModel.swift in Sources */,
-				228558952F5410CD0034383D /* ProductCard.swift in Sources */,
-				228558972F542D560034383D /* Theme.swift in Sources */,
-				2285589D2F54318A0034383D /* ExploreProductsView.swift in Sources */,
+				BB0000010000000000000001 /* AppRouter.swift in Sources */,
+				BB0000010000000000000002 /* FirebaseAuthRepository.swift in Sources */,
+				BB0000010000000000000003 /* FirebaseCartRepository.swift in Sources */,
+				BB0000010000000000000004 /* FirebaseCouponRepository.swift in Sources */,
+				BB0000010000000000000005 /* FirebaseDealRepository.swift in Sources */,
+				BB0000010000000000000006 /* FirebaseFavoritesRepository.swift in Sources */,
+				BB0000010000000000000007 /* FirebaseOrderRepository.swift in Sources */,
+				BB0000010000000000000008 /* FirebaseProductRepository.swift in Sources */,
+				BB0000010000000000000009 /* FirebaseReviewRepository.swift in Sources */,
+				BB000001000000000000000A /* FirebaseUserRepository.swift in Sources */,
+				BB000001000000000000000B /* FirestoreSeeder.swift in Sources */,
+				BB000001000000000000000C /* APIClient.swift in Sources */,
+				BB000001000000000000000D /* CurrencyService.swift in Sources */,
+				BB000001000000000000000E /* MockPaymentService.swift in Sources */,
+				BB000001000000000000000F /* Address.swift in Sources */,
+				BB0000010000000000000010 /* CartItem.swift in Sources */,
+				BB0000010000000000000011 /* Category.swift in Sources */,
+				BB0000010000000000000012 /* Coupon.swift in Sources */,
+				BB0000010000000000000013 /* CurrencyRate.swift in Sources */,
+				BB0000010000000000000014 /* Deal.swift in Sources */,
+				BB0000010000000000000015 /* FavoriteItem.swift in Sources */,
+				BB0000010000000000000016 /* Order.swift in Sources */,
+				BB0000010000000000000017 /* Product.swift in Sources */,
+				BB0000010000000000000018 /* Review.swift in Sources */,
+				BB0000010000000000000019 /* UserProfile.swift in Sources */,
+				BB000001000000000000001A /* Repositories.swift in Sources */,
+				BB000001000000000000001B /* AuthViewModel.swift in Sources */,
+				BB000001000000000000001C /* LoginView.swift in Sources */,
+				BB000001000000000000001D /* SignUpView.swift in Sources */,
+				BB000001000000000000001E /* CartView.swift in Sources */,
+				BB000001000000000000001F /* CartViewModel.swift in Sources */,
+				BB0000010000000000000020 /* AddressFormView.swift in Sources */,
+				BB0000010000000000000021 /* CheckoutView.swift in Sources */,
+				BB0000010000000000000022 /* CheckoutViewModel.swift in Sources */,
+				BB0000010000000000000023 /* OrderReviewView.swift in Sources */,
+				BB0000010000000000000024 /* OrderSuccessView.swift in Sources */,
+				BB0000010000000000000025 /* PaymentFormView.swift in Sources */,
+				BB0000010000000000000026 /* SharedComponents.swift in Sources */,
+				BB0000010000000000000027 /* FavoritesView.swift in Sources */,
+				BB0000010000000000000028 /* FavoritesViewModel.swift in Sources */,
+				BB0000010000000000000029 /* HomeView.swift in Sources */,
+				BB000001000000000000002A /* HomeViewModel.swift in Sources */,
+				BB000001000000000000002B /* OrderHistoryView.swift in Sources */,
+				BB000001000000000000002C /* ProfileView.swift in Sources */,
+				BB000001000000000000002D /* ProfileViewModel.swift in Sources */,
+				BB000001000000000000002E /* ProductDetailView.swift in Sources */,
+				BB000001000000000000002F /* ProductDetailViewModel.swift in Sources */,
+				BB0000010000000000000030 /* ShopView.swift in Sources */,
+				BB0000010000000000000031 /* ShopViewModel.swift in Sources */,
+				BB0000010000000000000032 /* AppTheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
