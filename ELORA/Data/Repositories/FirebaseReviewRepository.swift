@@ -1,6 +1,6 @@
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
+
 
 final class FirebaseReviewRepository: ReviewRepository {
 

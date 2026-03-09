@@ -1,7 +1,7 @@
 import Foundation
-import FirebaseFirestoreSwift
+import FirebaseFirestore
 
-struct Product: Identifiable, Codable, Equatable {
+struct Product: Identifiable, Codable, Hashable, Equatable {
     @DocumentID var id: String?
     var name: String
     var price: Double
@@ -18,7 +18,7 @@ struct Product: Identifiable, Codable, Equatable {
     var createdAt: Date?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, price, imageUrl, imageurl, description
+        case id, name, price, imageUrl, description
         case categoryId, brand, sizes, colors, stock
         case rating, reviewCount, isFeatured, createdAt
     }
@@ -61,7 +61,7 @@ struct Product: Identifiable, Codable, Equatable {
         name = try c.decode(String.self, forKey: .name)
         price = try c.decode(Double.self, forKey: .price)
         imageUrl = (try? c.decode(String.self, forKey: .imageUrl))
-            ?? (try? c.decode(String.self, forKey: .imageurl))
+            ?? (try? c.decode(String.self, forKey: .imageUrl))
             ?? ""
         description = try? c.decode(String.self, forKey: .description)
         categoryId = try? c.decode(String.self, forKey: .categoryId)
