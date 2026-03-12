@@ -39,6 +39,13 @@ struct OrderHistoryView: View {
                         .padding(.bottom, 100)
                     }
                 }
+
+                if let error = viewModel.errorMessage {
+                    Text(error)
+                        .font(AppFonts.caption)
+                        .foregroundColor(AppColors.error)
+                        .padding()
+                }
             }
         }
         .task {

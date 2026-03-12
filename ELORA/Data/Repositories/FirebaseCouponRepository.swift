@@ -34,6 +34,21 @@ final class FirebaseCouponRepository: CouponRepository {
             try $0.data(as: Coupon.self)
         }
     }
+
+    // MARK: - Admin CRUD
+
+    func addCoupon(_ data: [String: Any]) async throws -> String {
+        let docRef = try await db.collection(collection).addDocument(data: data)
+        return docRef.documentID
+    }
+
+    func updateCoupon(id: String, data: [String: Any]) async throws {
+        try await db.collection(collection).document(id).updateData(data)
+    }
+
+    func deleteCoupon(id: String) async throws {
+        try await db.collection(collection).document(id).delete()
+    }
 }
 
 enum CouponError: LocalizedError {

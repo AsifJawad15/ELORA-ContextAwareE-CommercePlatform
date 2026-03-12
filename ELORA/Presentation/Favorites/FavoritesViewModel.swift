@@ -26,6 +26,7 @@ final class FavoritesViewModel: ObservableObject {
     func loadFavorites() async {
         guard let userId = userId else { return }
         isLoading = true
+        errorMessage = nil
         do {
             favorites = try await favRepo.fetchFavorites(userId: userId)
         } catch {
@@ -61,7 +62,8 @@ final class FavoritesViewModel: ObservableObject {
             )
             do {
                 try await favRepo.addFavorite(userId: userId, item: item)
-                favorites.append(item)
+                // Reload to get proper document IDs
+                await loadFavorites()
             } catch {
                 errorMessage = error.localizedDescription
             }

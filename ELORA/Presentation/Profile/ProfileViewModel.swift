@@ -29,11 +29,14 @@ final class ProfileViewModel: ObservableObject {
     }
 
     func loadOrders(userId: String) async {
+        isLoading = true
+        errorMessage = nil
         do {
             orders = try await orderRepo.fetchOrders(userId: userId)
         } catch {
             errorMessage = error.localizedDescription
         }
+        isLoading = false
     }
 
     func updateDisplayName(_ name: String, userId: String) async {
@@ -49,6 +52,51 @@ final class ProfileViewModel: ObservableObject {
         do {
             try await userRepo.updateProfile(userId: userId, data: ["preferredCurrency": currency])
             profile?.preferredCurrency = currency
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func addAddress(_ address: Address, userId: String) async {
+        var addresses = profile?.savedAddresses ?? []
+        addresses.append(address)
+        do {
+            let encoded = addresses.map { addr -> [String: Any] in
+                [
+                    "fullName": addr.fullName,
+                    "phone": addr.phone,
+                    "street": addr.street,
+                    "city": addr.city,
+                    "state": addr.state,
+                    "zipCode": addr.zipCode,
+                    "country": addr.country
+                ]
+            }
+            try await userRepo.updateProfile(userId: userId, data: ["savedAddresses": encoded])
+            profile?.savedAddresses = addresses
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func deleteAddress(at index: Int, userId: String) async {
+        var addresses = profile?.savedAddresses ?? []
+        guard index < addresses.count else { return }
+        addresses.remove(at: index)
+        do {
+            let encoded = addresses.map { addr -> [String: Any] in
+                [
+                    "fullName": addr.fullName,
+                    "phone": addr.phone,
+                    "street": addr.street,
+                    "city": addr.city,
+                    "state": addr.state,
+                    "zipCode": addr.zipCode,
+                    "country": addr.country
+                ]
+            }
+            try await userRepo.updateProfile(userId: userId, data: ["savedAddresses": encoded])
+            profile?.savedAddresses = addresses
         } catch {
             errorMessage = error.localizedDescription
         }

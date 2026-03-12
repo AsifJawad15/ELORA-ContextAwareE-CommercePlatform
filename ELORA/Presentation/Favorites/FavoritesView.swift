@@ -5,13 +5,14 @@ struct FavoritesView: View {
     @ObservedObject var cartVM: CartViewModel
     @ObservedObject var currencyService: CurrencyService
     var onProduct: (Product) -> Void
+    var onMenu: () -> Void = {}
 
     var body: some View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                EloraTopBar(title: "FAVORITES")
+                EloraTopBar(title: "FAVORITES", onMenu: onMenu)
 
                 DiamondDivider(color: AppColors.line)
                     .padding(.horizontal)
@@ -67,6 +68,9 @@ struct FavoritesView: View {
                     }
                 }
             }
+        }
+        .task {
+            await favoritesVM.loadFavorites()
         }
     }
 }

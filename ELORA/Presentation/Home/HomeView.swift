@@ -7,6 +7,7 @@ struct HomeView: View {
     var onProduct: (Product) -> Void
     var onSearch: () -> Void
     var onCart: () -> Void
+    var onMenu: () -> Void = {}
 
     var body: some View {
         ZStack {
@@ -51,6 +52,7 @@ struct HomeView: View {
             VStack {
                 EloraTopBar(
                     title: "ELORA",
+                    onMenu: onMenu,
                     onSearch: onSearch,
                     onCart: onCart,
                     cartBadge: cartVM.itemCount

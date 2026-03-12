@@ -1,7 +1,6 @@
 import Foundation
 import FirebaseFirestore
 
-
 final class FirebaseFavoritesRepository: FavoritesRepository {
 
     private let db = Firestore.firestore()
@@ -19,7 +18,15 @@ final class FirebaseFavoritesRepository: FavoritesRepository {
 
     func addFavorite(userId: String, item: FavoriteItem) async throws {
         // Use productId as document ID to prevent duplicates
-        try favsCollection(userId: userId).document(item.productId).setData(from: item)
+        let docRef = favsCollection(userId: userId).document(item.productId)
+        let data: [String: Any] = [
+            "productId": item.productId,
+            "productName": item.productName,
+            "productImageUrl": item.productImageUrl,
+            "price": item.price,
+            "addedAt": Timestamp(date: item.addedAt ?? Date())
+        ]
+        try await docRef.setData(data)
     }
 
     func removeFavorite(userId: String, itemId: String) async throws {

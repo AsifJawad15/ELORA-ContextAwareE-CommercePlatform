@@ -1,7 +1,6 @@
 import Foundation
 import FirebaseFirestore
 
-
 final class FirebaseProductRepository: ProductRepository {
 
     private let db = Firestore.firestore()
@@ -61,6 +60,21 @@ final class FirebaseProductRepository: ProductRepository {
             return Array(try await fetchProducts().prefix(10))
         }
         return featured
+    }
+
+    // MARK: - Admin CRUD
+
+    func addProduct(_ data: [String: Any]) async throws -> String {
+        let docRef = try await db.collection(collection).addDocument(data: data)
+        return docRef.documentID
+    }
+
+    func updateProduct(id: String, data: [String: Any]) async throws {
+        try await db.collection(collection).document(id).updateData(data)
+    }
+
+    func deleteProduct(id: String) async throws {
+        try await db.collection(collection).document(id).delete()
     }
 }
 

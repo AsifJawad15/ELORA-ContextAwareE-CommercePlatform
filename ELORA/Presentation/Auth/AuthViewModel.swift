@@ -91,7 +91,15 @@ final class AuthViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            let _ = try await authRepo.signIn(email: email, password: password)
+            let uid = try await authRepo.signIn(email: email, password: password)
+            // Ensure user profile document exists
+            let profile = UserProfile(
+                id: uid,
+                email: email,
+                preferredCurrency: "USD",
+                createdAt: Date()
+            )
+            try await userRepo.createProfile(profile: profile)
             clearForm()
         } catch {
             errorMessage = error.localizedDescription
@@ -103,7 +111,16 @@ final class AuthViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         do {
-            let _ = try await authRepo.signInAsGuest()
+            let uid = try await authRepo.signInAsGuest()
+            // Create a profile document for the guest user so subcollections (favorites, cart) can work
+            let profile = UserProfile(
+                id: uid,
+                email: "guest@elora.app",
+                displayName: "Guest",
+                preferredCurrency: "USD",
+                createdAt: Date()
+            )
+            try await userRepo.createProfile(profile: profile)
         } catch {
             errorMessage = error.localizedDescription
         }

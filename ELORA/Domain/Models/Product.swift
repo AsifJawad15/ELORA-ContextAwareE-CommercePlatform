@@ -1,7 +1,7 @@
 import Foundation
 import FirebaseFirestore
 
-struct Product: Identifiable, Codable, Hashable, Equatable {
+struct Product: Identifiable, Codable, Hashable {
     @DocumentID var id: String?
     var name: String
     var price: Double
@@ -18,7 +18,7 @@ struct Product: Identifiable, Codable, Hashable, Equatable {
     var createdAt: Date?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, price, imageUrl, description
+        case id, name, price, imageUrl, imageurl, description
         case categoryId, brand, sizes, colors, stock
         case rating, reviewCount, isFeatured, createdAt
     }
@@ -61,7 +61,7 @@ struct Product: Identifiable, Codable, Hashable, Equatable {
         name = try c.decode(String.self, forKey: .name)
         price = try c.decode(Double.self, forKey: .price)
         imageUrl = (try? c.decode(String.self, forKey: .imageUrl))
-            ?? (try? c.decode(String.self, forKey: .imageUrl))
+            ?? (try? c.decode(String.self, forKey: .imageurl))
             ?? ""
         description = try? c.decode(String.self, forKey: .description)
         categoryId = try? c.decode(String.self, forKey: .categoryId)
@@ -77,5 +77,27 @@ struct Product: Identifiable, Codable, Hashable, Equatable {
 
     static func == (lhs: Product, rhs: Product) -> Bool {
         lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encodeIfPresent(id, forKey: .id)
+        try c.encode(name, forKey: .name)
+        try c.encode(price, forKey: .price)
+        try c.encode(imageUrl, forKey: .imageUrl)
+        try c.encodeIfPresent(description, forKey: .description)
+        try c.encodeIfPresent(categoryId, forKey: .categoryId)
+        try c.encodeIfPresent(brand, forKey: .brand)
+        try c.encodeIfPresent(sizes, forKey: .sizes)
+        try c.encodeIfPresent(colors, forKey: .colors)
+        try c.encodeIfPresent(stock, forKey: .stock)
+        try c.encodeIfPresent(rating, forKey: .rating)
+        try c.encodeIfPresent(reviewCount, forKey: .reviewCount)
+        try c.encodeIfPresent(isFeatured, forKey: .isFeatured)
+        try c.encodeIfPresent(createdAt, forKey: .createdAt)
     }
 }

@@ -57,54 +57,77 @@ struct MainTabView: View {
 
     @State private var selectedTab: AppTab = .home
     @State private var navigationPath = NavigationPath()
+    @State private var showSideMenu = false
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            ZStack(alignment: .bottom) {
-                // Tab Content
-                Group {
-                    switch selectedTab {
-                    case .home:
-                        HomeView(
-                            currencyService: currencyService,
-                            cartVM: cartVM,
-                            onProduct: { navigateTo(.productDetail($0)) },
-                            onSearch: { selectedTab = .shop },
-                            onCart: { navigateTo(.cart) }
-                        )
-                    case .shop:
-                        ShopView(
-                            currencyService: currencyService,
-                            cartVM: cartVM,
-                            favoritesVM: favoritesVM,
-                            onProduct: { navigateTo(.productDetail($0)) },
-                            onCart: { navigateTo(.cart) }
-                        )
-                    case .favorites:
-                        FavoritesView(
-                            favoritesVM: favoritesVM,
-                            cartVM: cartVM,
-                            currencyService: currencyService,
-                            onProduct: { navigateTo(.productDetail($0)) }
-                        )
-                    case .profile:
-                        ProfileView(
-                            authVM: authVM,
-                            currencyService: currencyService,
-                            onOrderHistory: { navigateTo(.orderHistory) }
-                        )
+        ZStack {
+            NavigationStack(path: $navigationPath) {
+                ZStack(alignment: .bottom) {
+                    // Tab Content
+                    Group {
+                        switch selectedTab {
+                        case .home:
+                            HomeView(
+                                currencyService: currencyService,
+                                cartVM: cartVM,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onSearch: { selectedTab = .shop },
+                                onCart: { navigateTo(.cart) },
+                                onMenu: { withAnimation(.easeInOut(duration: 0.25)) { showSideMenu = true } }
+                            )
+                        case .shop:
+                            ShopView(
+                                currencyService: currencyService,
+                                cartVM: cartVM,
+                                favoritesVM: favoritesVM,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onCart: { navigateTo(.cart) },
+                                onMenu: { withAnimation(.easeInOut(duration: 0.25)) { showSideMenu = true } }
+                            )
+                        case .favorites:
+                            FavoritesView(
+                                favoritesVM: favoritesVM,
+                                cartVM: cartVM,
+                                currencyService: currencyService,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onMenu: { withAnimation(.easeInOut(duration: 0.25)) { showSideMenu = true } }
+                            )
+                        case .profile:
+                            ProfileView(
+                                authVM: authVM,
+                                currencyService: currencyService,
+                                favoritesVM: favoritesVM,
+                                onOrderHistory: { navigateTo(.orderHistory) },
+                                onFavorites: { selectedTab = .favorites },
+                                onMenu: { withAnimation(.easeInOut(duration: 0.25)) { showSideMenu = true } }
+                            )
+                        }
                     }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                // Custom Tab Bar
-                customTabBar
+                    // Custom Tab Bar
+                    customTabBar
+                }
+                .navigationDestination(for: AppDestination.self) { dest in
+                    destinationView(dest)
+                }
             }
-            .navigationDestination(for: AppDestination.self) { dest in
-                destinationView(dest)
-            }
+
+            // Side Menu Overlay
+            SideMenuView(
+                isOpen: $showSideMenu,
+                userEmail: authVM.userEmail,
+                isGuest: authVM.isGuest,
+                onHome: { selectedTab = .home },
+                onShop: { selectedTab = .shop },
+                onFavorites: { selectedTab = .favorites },
+                onCart: { navigateTo(.cart) },
+                onOrders: { navigateTo(.orderHistory) },
+                onProfile: { selectedTab = .profile },
+                onSignOut: { authVM.signOut() }
+            )
         }
-        .onChange(of: authVM.userId) { newValue in
+        .onChange(of: authVM.userId) { oldValue, newValue in
             cartVM.setUser(newValue)
             favoritesVM.setUser(newValue)
         }
@@ -132,7 +155,7 @@ struct MainTabView: View {
                 onBack: { navigationPath.removeLast() },
                 onCart: { navigateTo(.cart) }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .search:
             ShopView(
@@ -142,7 +165,7 @@ struct MainTabView: View {
                 onProduct: { navigateTo(.productDetail($0)) },
                 onCart: { navigateTo(.cart) }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .cart:
             CartView(
@@ -151,7 +174,7 @@ struct MainTabView: View {
                 onCheckout: { navigateTo(.checkout) },
                 onContinueShopping: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .checkout:
             CheckoutView(
@@ -165,7 +188,7 @@ struct MainTabView: View {
                 },
                 onBack: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .orderHistory:
             OrderHistoryView(
@@ -173,7 +196,7 @@ struct MainTabView: View {
                 userId: authVM.userId ?? "",
                 onBack: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .orderSuccess(let orderId):
             OrderSuccessView(
@@ -184,7 +207,7 @@ struct MainTabView: View {
                     selectedTab = .home
                 }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
         }
     }
 

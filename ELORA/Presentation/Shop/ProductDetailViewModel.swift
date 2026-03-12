@@ -21,17 +21,37 @@ final class ProductDetailViewModel: ObservableObject {
     }
 
     func loadProduct(_ product: Product) async {
-        self.product = product
-        selectedSize = product.sizes?.first
-        selectedColor = product.colors?.first
+        isLoading = true
+        // If product has minimal data (e.g. navigated from favorites), re-fetch from Firestore
+        if let productId = product.id, product.description == nil || product.sizes == nil {
+            do {
+                let fullProduct = try await productRepo.fetchProduct(id: productId)
+                self.product = fullProduct
+                selectedSize = fullProduct.sizes?.first
+                selectedColor = fullProduct.colors?.first
+            } catch {
+                // Fallback to the passed product
+                self.product = product
+                selectedSize = product.sizes?.first
+                selectedColor = product.colors?.first
+            }
+        } else {
+            self.product = product
+            selectedSize = product.sizes?.first
+            selectedColor = product.colors?.first
+        }
 
         // Load reviews
-        guard let productId = product.id else { return }
+        guard let productId = (self.product ?? product).id else {
+            isLoading = false
+            return
+        }
         do {
             reviews = try await reviewRepo.fetchReviews(productId: productId)
         } catch {
             print("Failed to load reviews: \(error)")
         }
+        isLoading = false
     }
 
     var averageRating: Double {

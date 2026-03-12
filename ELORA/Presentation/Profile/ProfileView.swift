@@ -4,14 +4,21 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @ObservedObject var authVM: AuthViewModel
     @ObservedObject var currencyService: CurrencyService
+    @ObservedObject var favoritesVM: FavoritesViewModel
     var onOrderHistory: () -> Void
+    var onFavorites: () -> Void = {}
+    var onMenu: () -> Void = {}
+
+    @State private var showAddresses = false
+    @State private var showAddAddressForm = false
+    @State private var editingAddress: Address?
 
     var body: some View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                EloraTopBar(title: "PROFILE")
+                EloraTopBar(title: "PROFILE", onMenu: onMenu)
 
                 DiamondDivider(color: AppColors.line)
                     .padding(.horizontal)
@@ -51,6 +58,27 @@ struct ProfileView: View {
                 await viewModel.loadProfile(userId: userId)
                 await viewModel.loadOrders(userId: userId)
             }
+        }
+        .sheet(isPresented: $showAddresses) {
+            SavedAddressesSheet(
+                addresses: viewModel.profile?.savedAddresses ?? [],
+                onAdd: { showAddAddressForm = true },
+                onDelete: { index in
+                    if let uid = authVM.userId {
+                        Task { await viewModel.deleteAddress(at: index, userId: uid) }
+                    }
+                }
+            )
+            .presentationDetents([.medium, .large])
+        }
+        .sheet(isPresented: $showAddAddressForm) {
+            AddAddressSheet { address in
+                if let uid = authVM.userId {
+                    Task { await viewModel.addAddress(address, userId: uid) }
+                }
+                showAddAddressForm = false
+            }
+            .presentationDetents([.large])
         }
     }
 
@@ -148,8 +176,12 @@ struct ProfileView: View {
             menuRow(icon: "bag", title: "Order History", badge: viewModel.orders.count) {
                 onOrderHistory()
             }
-            menuRow(icon: "heart", title: "Favorites", badge: 0) {}
-            menuRow(icon: "mappin.and.ellipse", title: "Saved Addresses", badge: 0) {}
+            menuRow(icon: "heart", title: "Favorites", badge: favoritesVM.favorites.count) {
+                onFavorites()
+            }
+            menuRow(icon: "mappin.and.ellipse", title: "Saved Addresses", badge: viewModel.profile?.savedAddresses?.count ?? 0) {
+                showAddresses = true
+            }
             menuRow(icon: "bell", title: "Notifications", badge: 0) {}
             menuRow(icon: "questionmark.circle", title: "Help & Support", badge: 0) {}
         }
@@ -196,5 +228,151 @@ struct ProfileView: View {
             return "\(parts[0].prefix(1))\(parts[1].prefix(1))".uppercased()
         }
         return String(name.prefix(2)).uppercased()
+    }
+}
+
+// MARK: - Saved Addresses Sheet
+
+struct SavedAddressesSheet: View {
+    let addresses: [Address]
+    var onAdd: () -> Void
+    var onDelete: (Int) -> Void
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColors.background.ignoresSafeArea()
+
+                if addresses.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "mappin.slash")
+                            .font(.system(size: 48))
+                            .foregroundColor(AppColors.muted)
+                        Text("No Saved Addresses")
+                            .font(AppFonts.headline)
+                            .foregroundColor(AppColors.text)
+                        Text("Add an address for faster checkout")
+                            .font(AppFonts.caption)
+                            .foregroundColor(AppColors.muted)
+                    }
+                } else {
+                    List {
+                        ForEach(Array(addresses.enumerated()), id: \.offset) { index, address in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(address.fullName)
+                                    .font(AppFonts.subheadline)
+                                    .foregroundColor(AppColors.text)
+                                Text(address.formatted)
+                                    .font(AppFonts.caption)
+                                    .foregroundColor(AppColors.muted)
+                                Text(address.phone)
+                                    .font(AppFonts.caption)
+                                    .foregroundColor(AppColors.muted)
+                            }
+                            .listRowBackground(AppColors.surface)
+                        }
+                        .onDelete { indexSet in
+                            indexSet.forEach { onDelete($0) }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                }
+            }
+            .navigationTitle("Saved Addresses")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: onAdd) {
+                        Image(systemName: "plus")
+                            .foregroundColor(AppColors.accent)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Add Address Sheet
+
+struct AddAddressSheet: View {
+    var onSave: (Address) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var fullName = ""
+    @State private var phone = ""
+    @State private var street = ""
+    @State private var city = ""
+    @State private var state = ""
+    @State private var zipCode = ""
+    @State private var country = ""
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppColors.background.ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: AppSpacing.md) {
+                        addressField("Full Name", text: $fullName)
+                        addressField("Phone", text: $phone)
+                        addressField("Street Address", text: $street)
+                        addressField("City", text: $city)
+                        addressField("State / Province", text: $state)
+                        addressField("Zip Code", text: $zipCode)
+                        addressField("Country", text: $country)
+
+                        Button(action: save) {
+                            Text("SAVE ADDRESS")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(EloraPrimaryButton())
+                        .disabled(fullName.isEmpty || street.isEmpty || city.isEmpty || country.isEmpty)
+                        .padding(.top, AppSpacing.md)
+                    }
+                    .padding(AppSpacing.lg)
+                }
+            }
+            .navigationTitle("Add Address")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") { dismiss() }
+                        .foregroundColor(AppColors.accent)
+                }
+            }
+        }
+    }
+
+    private func addressField(_ label: String, text: Binding<String>) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(AppFonts.caption)
+                .foregroundColor(AppColors.muted)
+            TextField(label, text: text)
+                .font(AppFonts.body)
+                .foregroundColor(AppColors.text)
+                .padding(AppSpacing.sm)
+                .background(AppColors.surface)
+                .cornerRadius(AppRadius.sm)
+                .overlay(
+                    RoundedRectangle(cornerRadius: AppRadius.sm)
+                        .stroke(AppColors.line, lineWidth: 1)
+                )
+        }
+    }
+
+    private func save() {
+        let address = Address(
+            fullName: fullName,
+            phone: phone,
+            street: street,
+            city: city,
+            state: state,
+            zipCode: zipCode,
+            country: country
+        )
+        onSave(address)
+        dismiss()
     }
 }

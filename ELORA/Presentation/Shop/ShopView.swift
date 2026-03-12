@@ -7,6 +7,7 @@ struct ShopView: View {
     @ObservedObject var favoritesVM: FavoritesViewModel
     var onProduct: (Product) -> Void
     var onCart: () -> Void
+    var onMenu: () -> Void = {}
 
     @State private var showSearch = false
 
@@ -18,6 +19,7 @@ struct ShopView: View {
                 // Top Bar
                 EloraTopBar(
                     title: "SHOP",
+                    onMenu: onMenu,
                     onSearch: { showSearch.toggle() },
                     onCart: onCart,
                     cartBadge: cartVM.itemCount

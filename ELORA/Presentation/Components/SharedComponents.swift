@@ -40,6 +40,7 @@ struct EloraTopBar: View {
     var title: String = "ELORA"
     var showBack: Bool = false
     var onBack: (() -> Void)? = nil
+    var onMenu: (() -> Void)? = nil
     var onSearch: (() -> Void)? = nil
     var onCart: (() -> Void)? = nil
     var cartBadge: Int = 0
@@ -61,7 +62,7 @@ struct EloraTopBar: View {
                         .foregroundColor(style.textColor)
                 }
             } else {
-                Button(action: {}) {
+                Button(action: { onMenu?() }) {
                     Image(systemName: "line.3.horizontal")
                         .font(.system(size: 18, weight: .regular))
                         .foregroundColor(style.textColor)
@@ -376,5 +377,101 @@ struct ProductTileView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColors.surface)
+    }
+}
+
+// MARK: - Side Menu
+struct SideMenuView: View {
+    @Binding var isOpen: Bool
+    var userEmail: String?
+    var isGuest: Bool
+    var onHome: () -> Void
+    var onShop: () -> Void
+    var onFavorites: () -> Void
+    var onCart: () -> Void
+    var onOrders: () -> Void
+    var onProfile: () -> Void
+    var onSignOut: () -> Void
+
+    var body: some View {
+        ZStack(alignment: .leading) {
+            if isOpen {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture { withAnimation(.easeInOut(duration: 0.25)) { isOpen = false } }
+            }
+
+            HStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("ELORA")
+                            .font(AppFonts.tenor(24))
+                            .foregroundColor(AppColors.accent)
+
+                        if let email = userEmail {
+                            Text(email)
+                                .font(AppFonts.caption)
+                                .foregroundColor(AppColors.muted)
+                        } else if isGuest {
+                            Text("Guest User")
+                                .font(AppFonts.caption)
+                                .foregroundColor(AppColors.muted)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 60)
+                    .padding(.bottom, 24)
+
+                    DiamondDivider(color: AppColors.line)
+                        .padding(.horizontal, 16)
+
+                    VStack(alignment: .leading, spacing: 0) {
+                        sideMenuItem(icon: "house", title: "Home", action: onHome)
+                        sideMenuItem(icon: "square.grid.2x2", title: "Shop", action: onShop)
+                        sideMenuItem(icon: "heart", title: "Favorites", action: onFavorites)
+                        sideMenuItem(icon: "bag", title: "Cart", action: onCart)
+                        sideMenuItem(icon: "shippingbox", title: "Orders", action: onOrders)
+                        sideMenuItem(icon: "person", title: "Profile", action: onProfile)
+                    }
+                    .padding(.top, 8)
+
+                    Spacer()
+
+                    DiamondDivider(color: AppColors.line)
+                        .padding(.horizontal, 16)
+
+                    sideMenuItem(icon: "rectangle.portrait.and.arrow.right", title: "Sign Out", action: onSignOut)
+                        .padding(.bottom, 40)
+                }
+                .frame(width: 280)
+                .background(AppColors.background)
+
+                Spacer()
+            }
+            .offset(x: isOpen ? 0 : -300)
+        }
+        .animation(.easeInOut(duration: 0.25), value: isOpen)
+    }
+
+    private func sideMenuItem(icon: String, title: String, action: @escaping () -> Void) -> some View {
+        Button(action: {
+            withAnimation(.easeInOut(duration: 0.25)) { isOpen = false }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.26) { action() }
+        }) {
+            HStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 18))
+                    .foregroundColor(AppColors.accent)
+                    .frame(width: 24)
+
+                Text(title)
+                    .font(AppFonts.subheadline)
+                    .foregroundColor(AppColors.text)
+
+                Spacer()
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 14)
+        }
     }
 }
