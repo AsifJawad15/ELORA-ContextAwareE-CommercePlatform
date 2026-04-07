@@ -1,7 +1,6 @@
 import Foundation
 import FirebaseFirestore
 
-
 final class FirebaseFavoritesRepository: FavoritesRepository {
 
     private let db = Firestore.firestore()

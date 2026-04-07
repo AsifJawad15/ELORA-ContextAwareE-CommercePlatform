@@ -114,7 +114,7 @@ struct HomeView: View {
             ],
             spacing: 16
         ) {
-            ForEach(viewModel.featuredProducts.prefix(6)) { product in
+            ForEach(viewModel.featuredProducts.prefix(6), id: \.stableId) { product in
                 ProductTileView(
                     product: product,
                     currencyService: currencyService,
@@ -150,7 +150,7 @@ struct HomeView: View {
             ],
             spacing: 16
         ) {
-            ForEach(viewModel.featuredProducts.suffix(4)) { product in
+            ForEach(viewModel.featuredProducts.suffix(4), id: \.stableId) { product in
                 ProductTileView(
                     product: product,
                     currencyService: currencyService,

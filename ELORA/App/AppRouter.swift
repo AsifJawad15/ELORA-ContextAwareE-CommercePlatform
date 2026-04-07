@@ -2,13 +2,34 @@ import SwiftUI
 
 // MARK: - Navigation Destination
 
-enum AppDestination: Hashable {
+enum AppDestination: Equatable {
     case productDetail(Product)
     case search
     case cart
     case checkout
     case orderHistory
     case orderSuccess(String)
+}
+
+extension AppDestination: Hashable {
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .productDetail(let product):
+            hasher.combine(0)
+            hasher.combine(product.id)  // use the String? id directly
+        case .search:
+            hasher.combine(1)
+        case .cart:
+            hasher.combine(2)
+        case .checkout:
+            hasher.combine(3)
+        case .orderHistory:
+            hasher.combine(4)
+        case .orderSuccess(let id):
+            hasher.combine(5)
+            hasher.combine(id)
+        }
+    }
 }
 
 // MARK: - Tab
@@ -104,6 +125,7 @@ struct MainTabView: View {
                 destinationView(dest)
             }
         }
+        // Cleanest fix — works for iOS 16 and below
         .onChange(of: authVM.userId) { newValue in
             cartVM.setUser(newValue)
             favoritesVM.setUser(newValue)
@@ -132,7 +154,7 @@ struct MainTabView: View {
                 onBack: { navigationPath.removeLast() },
                 onCart: { navigateTo(.cart) }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .search:
             ShopView(
@@ -142,7 +164,7 @@ struct MainTabView: View {
                 onProduct: { navigateTo(.productDetail($0)) },
                 onCart: { navigateTo(.cart) }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .cart:
             CartView(
@@ -151,7 +173,7 @@ struct MainTabView: View {
                 onCheckout: { navigateTo(.checkout) },
                 onContinueShopping: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .checkout:
             CheckoutView(
@@ -165,7 +187,7 @@ struct MainTabView: View {
                 },
                 onBack: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .orderHistory:
             OrderHistoryView(
@@ -173,7 +195,7 @@ struct MainTabView: View {
                 userId: authVM.userId ?? "",
                 onBack: { navigationPath.removeLast() }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
 
         case .orderSuccess(let orderId):
             OrderSuccessView(
@@ -184,7 +206,7 @@ struct MainTabView: View {
                     selectedTab = .home
                 }
             )
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
         }
     }
 

@@ -1,11 +1,12 @@
 import Foundation
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct Product: Identifiable, Codable, Hashable, Equatable {
     @DocumentID var id: String?
     var name: String
     var price: Double
-    var imageUrl: String
+    var imageUrl: String?
     var description: String?
     var categoryId: String?
     var brand: String?
@@ -16,9 +17,30 @@ struct Product: Identifiable, Codable, Hashable, Equatable {
     var reviewCount: Int?
     var isFeatured: Bool?
     var createdAt: Date?
+    
+    var stableId: String {
+        if let id, !id.isEmpty {
+            return id
+        }
 
+        return [
+            name.lowercased(),
+            categoryId?.lowercased() ?? "",
+            brand?.lowercased() ?? "",
+            String(price)
+        ]
+        .map {
+            $0.replacingOccurrences(of: "/", with: "-")
+              .replacingOccurrences(of: " ", with: "-")
+        }
+        .joined(separator: "|")
+    }
+
+
+
+    // NOTE: 'id' is intentionally excluded — @DocumentID handles it automatically
     enum CodingKeys: String, CodingKey {
-        case id, name, price, imageUrl, description
+        case name, price, imageUrl, description
         case categoryId, brand, sizes, colors, stock
         case rating, reviewCount, isFeatured, createdAt
     }
@@ -55,27 +77,12 @@ struct Product: Identifiable, Codable, Hashable, Equatable {
         self.createdAt = createdAt
     }
 
-    init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        _id = try c.decodeIfPresent(DocumentID<String>.self, forKey: .id) ?? DocumentID(wrappedValue: nil)
-        name = try c.decode(String.self, forKey: .name)
-        price = try c.decode(Double.self, forKey: .price)
-        imageUrl = (try? c.decode(String.self, forKey: .imageUrl))
-            ?? (try? c.decode(String.self, forKey: .imageUrl))
-            ?? ""
-        description = try? c.decode(String.self, forKey: .description)
-        categoryId = try? c.decode(String.self, forKey: .categoryId)
-        brand = try? c.decode(String.self, forKey: .brand)
-        sizes = try? c.decode([String].self, forKey: .sizes)
-        colors = try? c.decode([String].self, forKey: .colors)
-        stock = try? c.decode(Int.self, forKey: .stock)
-        rating = try? c.decode(Double.self, forKey: .rating)
-        reviewCount = try? c.decode(Int.self, forKey: .reviewCount)
-        isFeatured = try? c.decode(Bool.self, forKey: .isFeatured)
-        createdAt = try? c.decode(Date.self, forKey: .createdAt)
+    static func == (lhs: Product, rhs: Product) -> Bool {
+        lhs.stableId == rhs.stableId
     }
 
-    static func == (lhs: Product, rhs: Product) -> Bool {
-        lhs.id == rhs.id
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(stableId)
     }
+
 }

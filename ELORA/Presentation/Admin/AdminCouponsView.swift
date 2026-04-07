@@ -33,7 +33,7 @@ struct AdminCouponsView: View {
                                 onEdit: { editingCoupon = coupon },
                                 onDelete: {
                                     if let id = coupon.id {
-                                        Task { await viewModel.deleteCoupon(couponId: id) }
+                                        Task { await viewModel.deleteCoupon(id: id) }
                                     }
                                 }
                             )
@@ -258,22 +258,26 @@ struct AdminCouponFormView: View {
 
     private func save() {
         guard let dv = Double(discountValue) else { return }
-        var c = coupon ?? Coupon(
-            code: "", discountType: .percentage, discountValue: 0, isActive: true
-        )
-        c.code = code.uppercased()
-        c.discountType = discountType
-        c.discountValue = dv
-        c.minOrderAmount = Double(minOrderAmount)
-        c.maxDiscount = discountType == .percentage ? Double(maxDiscount) : nil
-        c.expiresAt = hasExpiry ? expiresAt : nil
-        c.isActive = isActive
-
         Task {
-            if coupon?.id != nil {
-                await viewModel.updateCoupon(c)
+            if let existing = coupon, existing.id != nil {
+                var updated = existing
+                updated.code = code.uppercased()
+                updated.discountType = discountType
+                updated.discountValue = dv
+                updated.minOrderAmount = Double(minOrderAmount)
+                updated.maxDiscount = discountType == .percentage ? Double(maxDiscount) : nil
+                updated.expiresAt = hasExpiry ? expiresAt : nil
+                updated.isActive = isActive
+                await viewModel.updateCoupon(updated)
             } else {
-                await viewModel.addCoupon(c)
+                await viewModel.addCoupon(
+                    code: code,
+                    discountType: discountType.rawValue,
+                    discountValue: dv,
+                    minOrderAmount: Double(minOrderAmount) ?? 0,
+                    maxDiscount: Double(maxDiscount) ?? 0,
+                    expiresAt: hasExpiry ? expiresAt : Date()
+                )
             }
             dismiss()
         }

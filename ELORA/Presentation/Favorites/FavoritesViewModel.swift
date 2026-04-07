@@ -26,6 +26,7 @@ final class FavoritesViewModel: ObservableObject {
     func loadFavorites() async {
         guard let userId = userId else { return }
         isLoading = true
+        errorMessage = nil
         do {
             favorites = try await favRepo.fetchFavorites(userId: userId)
         } catch {
@@ -39,8 +40,8 @@ final class FavoritesViewModel: ObservableObject {
     }
 
     func toggleFavorite(product: Product) async {
-        guard let userId = userId,
-              let productId = product.id else { return }
+        guard let userId = userId else { return }
+        let productId = product.id ?? product.stableId
 
         if isFavorite(productId: productId) {
             // Remove
@@ -55,7 +56,7 @@ final class FavoritesViewModel: ObservableObject {
             let item = FavoriteItem(
                 productId: productId,
                 productName: product.name,
-                productImageUrl: product.imageUrl,
+                productImageUrl: product.imageUrl ?? "",
                 price: product.price,
                 addedAt: Date()
             )

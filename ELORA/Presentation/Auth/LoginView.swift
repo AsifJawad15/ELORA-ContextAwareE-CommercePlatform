@@ -3,6 +3,7 @@ import SwiftUI
 struct LoginView: View {
     @ObservedObject var viewModel: AuthViewModel
     @State private var showSignUp = false
+    var onAdminLogin: () -> Void = {}
 
     var body: some View {
         ZStack {
@@ -89,6 +90,16 @@ struct LoginView: View {
                         .foregroundColor(AppColors.accent)
                     }
                     .padding(.top, AppSpacing.sm)
+
+                    Button(action: onAdminLogin) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "shield.lefthalf.filled")
+                                .font(.system(size: 12))
+                            Text("Admin Login")
+                                .font(AppFonts.caption)
+                        }
+                        .foregroundColor(AppColors.muted)
+                    }
 
                     Spacer(minLength: 40)
                 }

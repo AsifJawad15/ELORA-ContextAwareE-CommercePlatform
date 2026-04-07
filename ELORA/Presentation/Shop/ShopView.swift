@@ -79,7 +79,7 @@ struct ShopView: View {
                             ],
                             spacing: 16
                         ) {
-                            ForEach(viewModel.filteredProducts) { product in
+                            ForEach(viewModel.filteredProducts, id: \.stableId) { product in
                                 ProductTileView(
                                     product: product,
                                     currencyService: currencyService,
@@ -87,7 +87,7 @@ struct ShopView: View {
                                     onFavorite: {
                                         Task { await favoritesVM.toggleFavorite(product: product) }
                                     },
-                                    isFavorite: favoritesVM.isFavorite(productId: product.id ?? "")
+                                    isFavorite: favoritesVM.isFavorite(productId: product.id ?? product.stableId)
                                 )
                             }
                         }

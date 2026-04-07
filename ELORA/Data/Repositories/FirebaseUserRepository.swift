@@ -1,7 +1,6 @@
 import Foundation
 import FirebaseFirestore
 
-
 final class FirebaseUserRepository: UserRepository {
 
     private let db = Firestore.firestore()

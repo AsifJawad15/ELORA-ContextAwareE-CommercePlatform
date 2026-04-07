@@ -300,68 +300,69 @@ struct ProductTileView: View {
     var isFavorite: Bool = false
 
     var body: some View {
-        Button(action: { onTap?() }) {
-            VStack(alignment: .leading, spacing: 6) {
-                // Image
-                ZStack(alignment: .topTrailing) {
-                    AsyncImage(url: URL(string: product.imageUrl)) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        case .failure:
-                            imageFallback
-                        case .empty:
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        @unknown default:
-                            imageFallback
-                        }
-                    }
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(AppRadius.sm)
-
-                    // Favorite Button
-                    if onFavorite != nil {
-                        Button(action: { onFavorite?() }) {
-                            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                .font(.system(size: 16))
-                                .foregroundColor(isFavorite ? AppColors.accent : AppColors.muted)
-                                .padding(8)
-                                .background(AppColors.background.opacity(0.6))
-                                .clipShape(Circle())
-                        }
-                        .padding(8)
+        VStack(alignment: .leading, spacing: 6) {
+            // Image
+            ZStack(alignment: .topTrailing) {
+                AsyncImage(url: URL(string: product.imageUrl ?? "")) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    case .failure:
+                        imageFallback
+                    case .empty:
+                        ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    @unknown default:
+                        imageFallback
                     }
                 }
+                .frame(height: 200)
+                .clipped()
+                .cornerRadius(AppRadius.sm)
 
-                // Name
-                Text(product.name)
-                    .font(AppFonts.subheadline)
-                    .foregroundColor(AppColors.text)
-                    .lineLimit(1)
+                // Favorite Button
+                if onFavorite != nil {
+                    Button(action: { onFavorite?() }) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .font(.system(size: 16))
+                            .foregroundColor(isFavorite ? AppColors.accent : AppColors.muted)
+                            .padding(8)
+                            .background(AppColors.background.opacity(0.6))
+                            .clipShape(Circle())
+                    }
+                    .padding(8)
+                }
+            }
 
-                // Price
-                Text(currencyService.formatted(product.price))
-                    .font(AppFonts.footnote)
-                    .foregroundColor(AppColors.accent)
+            // Name
+            Text(product.name)
+                .font(AppFonts.subheadline)
+                .foregroundColor(AppColors.text)
+                .lineLimit(1)
 
-                // Rating
-                if let rating = product.rating {
-                    HStack(spacing: 4) {
-                        StarRatingView(rating: rating, size: 10)
-                        if let count = product.reviewCount {
-                            Text("(\(count))")
-                                .font(AppFonts.caption2)
-                                .foregroundColor(AppColors.muted)
-                        }
+            // Price
+            Text(currencyService.formatted(product.price))
+                .font(AppFonts.footnote)
+                .foregroundColor(AppColors.accent)
+
+            // Rating
+            if let rating = product.rating {
+                HStack(spacing: 4) {
+                    StarRatingView(rating: rating, size: 10)
+                    if let count = product.reviewCount {
+                        Text("(\(count))")
+                            .font(AppFonts.caption2)
+                            .foregroundColor(AppColors.muted)
                     }
                 }
             }
         }
-        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            onTap?()
+        }
     }
 
     private var imageFallback: some View {

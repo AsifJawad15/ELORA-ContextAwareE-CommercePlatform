@@ -68,6 +68,9 @@ struct FavoritesView: View {
                 }
             }
         }
+        .task {
+            await favoritesVM.loadFavorites()
+        }
     }
 }
 

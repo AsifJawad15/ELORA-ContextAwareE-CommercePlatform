@@ -33,7 +33,7 @@ struct AdminDealsView: View {
                                 onEdit: { editingDeal = deal },
                                 onDelete: {
                                     if let id = deal.id {
-                                        Task { await viewModel.deleteDeal(dealId: id) }
+                                        Task { await viewModel.deleteDeal(id: id) }
                                     }
                                 }
                             )
@@ -287,21 +287,27 @@ struct AdminDealFormView: View {
     }
 
     private func save() {
-        var d = deal ?? Deal(title: "", isActive: true)
-        d.title = title
-        d.subtitle = subtitle.isEmpty ? nil : subtitle
-        d.imageUrl = imageUrl.isEmpty ? nil : imageUrl
-        d.discountPercentage = Double(discountPercentage)
-        d.categoryId = categoryId.isEmpty ? nil : categoryId
-        d.startsAt = startsAt
-        d.endsAt = endsAt
-        d.isActive = isActive
-
         Task {
-            if deal?.id != nil {
-                await viewModel.updateDeal(d)
+            if let existing = deal, existing.id != nil {
+                var updated = existing
+                updated.title = title
+                updated.subtitle = subtitle.isEmpty ? nil : subtitle
+                updated.imageUrl = imageUrl.isEmpty ? nil : imageUrl
+                updated.discountPercentage = Double(discountPercentage)
+                updated.categoryId = categoryId.isEmpty ? nil : categoryId
+                updated.startsAt = startsAt
+                updated.endsAt = endsAt
+                updated.isActive = isActive
+                await viewModel.updateDeal(updated)
             } else {
-                await viewModel.addDeal(d)
+                await viewModel.addDeal(
+                    title: title,
+                    subtitle: subtitle,
+                    discountPercentage: Double(discountPercentage) ?? 0,
+                    categoryId: categoryId,
+                    startsAt: startsAt,
+                    endsAt: endsAt
+                )
             }
             dismiss()
         }

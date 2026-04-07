@@ -1,5 +1,6 @@
 import Foundation
 import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct UserProfile: Identifiable, Codable {
     @DocumentID var id: String?
@@ -9,6 +10,7 @@ struct UserProfile: Identifiable, Codable {
     var phone: String?
     var savedAddresses: [Address]?
     var preferredCurrency: String?
+    var isAdmin: Bool?
     var createdAt: Date?
 
     static let guest = UserProfile(

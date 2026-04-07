@@ -112,7 +112,7 @@ struct ProductDetailView: View {
     // MARK: - Product Image
 
     private var productImage: some View {
-        AsyncImage(url: URL(string: product.imageUrl)) { phase in
+        AsyncImage(url: URL(string: product.imageUrl ?? "")) { phase in
             switch phase {
             case .success(let image):
                 image
@@ -304,10 +304,10 @@ struct ProductDetailView: View {
             Button(action: {
                 Task { await favoritesVM.toggleFavorite(product: product) }
             }) {
-                Image(systemName: favoritesVM.isFavorite(productId: product.id ?? "") ? "heart.fill" : "heart")
+                Image(systemName: favoritesVM.isFavorite(productId: product.id ?? product.stableId) ? "heart.fill" : "heart")
                     .font(.system(size: 22))
                     .foregroundColor(
-                        favoritesVM.isFavorite(productId: product.id ?? "")
+                        favoritesVM.isFavorite(productId: product.id ?? product.stableId)
                         ? AppColors.accent : AppColors.text
                     )
                     .frame(width: 52, height: 52)

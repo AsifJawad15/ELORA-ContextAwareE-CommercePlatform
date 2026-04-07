@@ -215,6 +215,27 @@ final class AdminViewModel: ObservableObject {
         }
         isLoading = false
     }
+    func updateCoupon(_ coupon: Coupon) async {
+        guard let id = coupon.id else { return }
+        isLoading = true
+        var data: [String: Any] = [
+            "code": coupon.code.uppercased(),
+            "discountType": coupon.discountType.rawValue,
+            "discountValue": coupon.discountValue,
+            "isActive": coupon.isActive
+        ]
+        if let min = coupon.minOrderAmount { data["minOrderAmount"] = min }
+        if let max = coupon.maxDiscount { data["maxDiscount"] = max }
+        if let exp = coupon.expiresAt { data["expiresAt"] = Timestamp(date: exp) }
+        do {
+            try await couponRepo.updateCoupon(id: id, data: data)
+            successMessage = "Coupon updated"
+            await loadCoupons()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
 
     // MARK: - Deal CRUD
 
@@ -243,6 +264,28 @@ final class AdminViewModel: ObservableObject {
         do {
             let _ = try await dealRepo.addDeal(data)
             successMessage = "Deal added"
+            await loadDeals()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+    func updateDeal(_ deal: Deal) async {
+        guard let id = deal.id else { return }
+        isLoading = true
+        var data: [String: Any] = [
+            "title": deal.title,
+            "isActive": deal.isActive
+        ]
+        if let subtitle = deal.subtitle { data["subtitle"] = subtitle }
+        if let imageUrl = deal.imageUrl { data["imageUrl"] = imageUrl }
+        if let pct = deal.discountPercentage { data["discountPercentage"] = pct }
+        if let cat = deal.categoryId { data["categoryId"] = cat }
+        if let s = deal.startsAt { data["startsAt"] = Timestamp(date: s) }
+        if let e = deal.endsAt { data["endsAt"] = Timestamp(date: e) }
+        do {
+            try await dealRepo.updateDeal(id: id, data: data)
+            successMessage = "Deal updated"
             await loadDeals()
         } catch {
             errorMessage = error.localizedDescription

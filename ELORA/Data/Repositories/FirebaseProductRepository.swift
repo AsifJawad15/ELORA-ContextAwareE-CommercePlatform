@@ -1,6 +1,6 @@
 import Foundation
 import FirebaseFirestore
-
+import FirebaseFirestoreSwift
 
 final class FirebaseProductRepository: ProductRepository {
 
@@ -9,10 +9,13 @@ final class FirebaseProductRepository: ProductRepository {
 
     func fetchProducts() async throws -> [Product] {
         let snapshot = try await db.collection(collection)
-            .order(by: "createdAt", descending: true)
             .getDocuments()
-        return try snapshot.documents.compactMap {
+        let products = try snapshot.documents.compactMap {
             try $0.data(as: Product.self)
+        }
+        // Sort client-side so products without createdAt are still included
+        return products.sorted {
+            ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast)
         }
     }
 
@@ -61,6 +64,21 @@ final class FirebaseProductRepository: ProductRepository {
             return Array(try await fetchProducts().prefix(10))
         }
         return featured
+    }
+
+    // MARK: - Admin CRUD
+
+    func addProduct(_ data: [String: Any]) async throws -> String {
+        let docRef = try await db.collection(collection).addDocument(data: data)
+        return docRef.documentID
+    }
+
+    func updateProduct(id: String, data: [String: Any]) async throws {
+        try await db.collection(collection).document(id).updateData(data)
+    }
+
+    func deleteProduct(id: String) async throws {
+        try await db.collection(collection).document(id).delete()
     }
 }
 

@@ -7,12 +7,15 @@
 
 import SwiftUI
 import FirebaseCore
+import FirebaseAuth
 
 @main
 struct ELORAApp: App {
 
     @StateObject private var authVM = AuthViewModel()
     @StateObject private var currencyService = CurrencyService.shared
+    @State private var isAdminMode = false
+    @State private var isAdminLoggedIn = false
 
     init() {
         FirebaseApp.configure()
@@ -36,13 +39,28 @@ struct ELORAApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
-                if authVM.isAuthenticated {
+                if isAdminMode {
+                    if isAdminLoggedIn {
+                        AdminDashboardView(
+                            onLogout: {
+                                try? Auth.auth().signOut()
+                                isAdminLoggedIn = false
+                                isAdminMode = false
+                            }
+                        )
+                    } else {
+                        AdminLoginView(
+                            isAdminLoggedIn: $isAdminLoggedIn,
+                            onBackToUser: { isAdminMode = false }
+                        )
+                    }
+                } else if authVM.isAuthenticated {
                     MainTabView(
                         authVM: authVM,
                         currencyService: currencyService
                     )
                 } else {
-                    LoginView(viewModel: authVM)
+                    LoginView(viewModel: authVM, onAdminLogin: { isAdminMode = true })
                 }
             }
             .preferredColorScheme(.dark)

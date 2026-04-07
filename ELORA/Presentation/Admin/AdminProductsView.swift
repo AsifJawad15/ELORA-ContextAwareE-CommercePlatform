@@ -56,7 +56,7 @@ struct AdminProductsView: View {
             } else {
                 ScrollView {
                     LazyVStack(spacing: 8) {
-                        ForEach(filteredProducts) { product in
+                        ForEach(Array(filteredProducts), id: \.stableId) { product in
                             AdminProductRow(
                                 product: product,
                                 onEdit: { editingProduct = product },
@@ -67,6 +67,7 @@ struct AdminProductsView: View {
                                 }
                             )
                         }
+
                     }
                     .padding(.horizontal, AppSpacing.md)
                     .padding(.bottom, 40)
@@ -106,7 +107,7 @@ struct AdminProductRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: URL(string: product.imageUrl)) { phase in
+            AsyncImage(url: URL(string: product.imageUrl ?? "")) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().scaledToFill()
@@ -279,7 +280,7 @@ struct AdminProductFormView: View {
                                 Text(isEditing ? "UPDATE PRODUCT" : "ADD PRODUCT")
                             }
                         }
-                        .buttonStyle(EloraPrimaryButton(fullWidth: true))
+                        .buttonStyle(EloraPrimaryButton(isFullWidth: true))
                         .disabled(viewModel.isLoading || name.isEmpty || price.isEmpty)
                         .padding(.top, AppSpacing.sm)
                     }
@@ -302,7 +303,7 @@ struct AdminProductFormView: View {
         guard let p = product else { return }
         name = p.name
         price = String(format: "%.2f", p.price)
-        imageUrl = p.imageUrl
+        imageUrl = p.imageUrl ?? ""
         description = p.description ?? ""
         categoryId = p.categoryId ?? "apparel"
         brand = p.brand ?? ""

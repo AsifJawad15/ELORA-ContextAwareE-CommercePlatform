@@ -1,7 +1,6 @@
 import Foundation
 import FirebaseFirestore
 
-
 final class FirebaseCartRepository: CartRepository {
 
     private let db = Firestore.firestore()

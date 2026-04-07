@@ -19,6 +19,9 @@ protocol ProductRepository {
     func fetchProduct(id: String) async throws -> Product
     func searchProducts(query: String) async throws -> [Product]
     func fetchFeaturedProducts() async throws -> [Product]
+    func addProduct(_ data: [String: Any]) async throws -> String
+    func updateProduct(id: String, data: [String: Any]) async throws
+    func deleteProduct(id: String) async throws
 }
 
 // MARK: - Cart Repository
@@ -42,14 +45,19 @@ protocol FavoritesRepository {
 protocol OrderRepository {
     func createOrder(order: Order) async throws -> String
     func fetchOrders(userId: String) async throws -> [Order]
+    func fetchAllOrders() async throws -> [Order]
     func fetchOrder(id: String) async throws -> Order
     func updateOrderStatus(orderId: String, status: OrderStatus) async throws
+    func deleteOrder(orderId: String) async throws
 }
 
 // MARK: - Coupon Repository
 protocol CouponRepository {
     func validateCoupon(code: String) async throws -> Coupon
     func fetchActiveCoupons() async throws -> [Coupon]
+    func addCoupon(_ data: [String: Any]) async throws -> String
+    func updateCoupon(id: String, data: [String: Any]) async throws
+    func deleteCoupon(id: String) async throws
 }
 
 // MARK: - Review Repository
@@ -68,4 +76,7 @@ protocol UserRepository {
 // MARK: - Deal Repository
 protocol DealRepository {
     func fetchActiveDeals() async throws -> [Deal]
+    func addDeal(_ data: [String: Any]) async throws -> String
+    func updateDeal(id: String, data: [String: Any]) async throws
+    func deleteDeal(id: String) async throws
 }

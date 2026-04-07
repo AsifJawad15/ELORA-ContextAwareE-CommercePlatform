@@ -29,11 +29,14 @@ final class ProfileViewModel: ObservableObject {
     }
 
     func loadOrders(userId: String) async {
+        isLoading = true
+        errorMessage = nil
         do {
             orders = try await orderRepo.fetchOrders(userId: userId)
         } catch {
             errorMessage = error.localizedDescription
         }
+        isLoading = false
     }
 
     func updateDisplayName(_ name: String, userId: String) async {

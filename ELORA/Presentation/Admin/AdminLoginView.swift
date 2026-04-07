@@ -25,7 +25,7 @@ struct AdminLoginView: View {
                         .foregroundColor(AppColors.accent)
 
                     Text("ELORA")
-                        .font(AppFonts.displayLarge)
+                        .font(AppFonts.largeTitle)
                         .foregroundColor(AppColors.text)
 
                     Text("Admin Panel")
