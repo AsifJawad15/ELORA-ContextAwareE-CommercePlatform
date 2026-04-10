@@ -1,0 +1,156 @@
+{
+  "gateway": {
+    "name": "ELORA Sandbox Gateway",
+    "processor": "NorthBridge Payments",
+    "acquirerBank": "Metropolitan Commerce Bank",
+    "terminalId": "ELR-TERM-1007"
+  },
+  "merchant": {
+    "displayName": "ELORA Atelier",
+    "descriptor": "ELORA ATELIER",
+    "merchantId": "ELORA-MOCK-001"
+  },
+  "processingDelayMs": {
+    "minimum": 700,
+    "maximum": 1500
+  },
+  "paymentMethods": [
+    {
+      "id": "stripe",
+      "title": "Stripe",
+      "subtitle": "Cards and hosted checkout",
+      "iconSystemName": "creditcard.fill",
+      "accountLabel": "Checkout Session",
+      "accountNumber": "STRP-SESSION-4482",
+      "payerFieldLabel": "Card holder or reference",
+      "confirmationLabel": "Confirm Stripe Payment",
+      "successMessage": "Stripe sandbox payment captured successfully."
+    },
+    {
+      "id": "apple_pay",
+      "title": "Apple Pay",
+      "subtitle": "Mock wallet approval",
+      "iconSystemName": "iphone.gen3",
+      "accountLabel": "Merchant Token",
+      "accountNumber": "APPLEPAY-MERCHANT-9090",
+      "payerFieldLabel": "Apple Pay device reference",
+      "confirmationLabel": "Confirm Apple Pay",
+      "successMessage": "Apple Pay mock authorization completed."
+    },
+    {
+      "id": "bkash",
+      "title": "bKash",
+      "subtitle": "Send to merchant wallet",
+      "iconSystemName": "phone.connection.fill",
+      "accountLabel": "Merchant Number",
+      "accountNumber": "01701-ELORA",
+      "payerFieldLabel": "Your bKash number",
+      "confirmationLabel": "I Have Paid with bKash",
+      "successMessage": "bKash mock transfer received."
+    },
+    {
+      "id": "nagad",
+      "title": "Nagad",
+      "subtitle": "Pseudo mobile wallet checkout",
+      "iconSystemName": "simcard.fill",
+      "accountLabel": "Merchant Number",
+      "accountNumber": "01888-ELORA",
+      "payerFieldLabel": "Your Nagad number",
+      "confirmationLabel": "I Have Paid with Nagad",
+      "successMessage": "Nagad mock transfer received."
+    },
+    {
+      "id": "cod",
+      "title": "Cash on Delivery",
+      "subtitle": "Pay after delivery confirmation",
+      "iconSystemName": "banknote.fill",
+      "accountLabel": "Payment",
+      "accountNumber": "Pay on delivery",
+      "payerFieldLabel": "Reference",
+      "confirmationLabel": "Use Cash on Delivery",
+      "successMessage": "Cash on delivery selected."
+    }
+  ],
+  "fallbackNetworks": [
+    "Visa",
+    "Mastercard",
+    "American Express",
+    "UnionPay"
+  ],
+  "fallbackIssuers": [
+    "Summit Trust Bank",
+    "Citywide Commercial Bank",
+    "Eastern Horizon Bank",
+    "Prime Capital Bank"
+  ],
+  "approvalRules": [
+    {
+      "cardLastFour": "4242",
+      "status": "approved",
+      "network": "Visa",
+      "issuer": "Summit Trust Bank",
+      "processorMessage": "Approved"
+    },
+    {
+      "cardLastFour": "1111",
+      "status": "approved",
+      "network": "Mastercard",
+      "issuer": "Citywide Commercial Bank",
+      "processorMessage": "Approved"
+    },
+    {
+      "cardLastFour": "4444",
+      "status": "approved",
+      "network": "American Express",
+      "issuer": "Eastern Horizon Bank",
+      "processorMessage": "Approved"
+    },
+    {
+      "cardLastFour": "0002",
+      "status": "declined",
+      "network": "Visa",
+      "issuer": "Summit Trust Bank",
+      "processorMessage": "Do not honor"
+    },
+    {
+      "cardLastFour": "0005",
+      "status": "declined",
+      "network": "Mastercard",
+      "issuer": "Prime Capital Bank",
+      "processorMessage": "Insufficient funds"
+    },
+    {
+      "cardLastFour": "0341",
+      "status": "declined",
+      "network": "Visa",
+      "issuer": "Citywide Commercial Bank",
+      "processorMessage": "Pickup card"
+    }
+  ],
+  "shippingRates": [
+    {
+      "countries": ["bangladesh", "bd"],
+      "method": "standard",
+      "baseAmount": 3.5,
+      "freeShippingThreshold": 100
+    },
+    {
+      "countries": ["united states", "usa", "us"],
+      "method": "standard",
+      "baseAmount": 5.99,
+      "freeShippingThreshold": 120
+    },
+    {
+      "countries": ["united kingdom", "uk", "gb"],
+      "method": "standard",
+      "baseAmount": 7.25,
+      "freeShippingThreshold": 140
+    }
+  ],
+  "defaultShippingRate": {
+    "countries": [],
+    "method": "international",
+    "baseAmount": 9.99,
+    "freeShippingThreshold": 150
+  }
+}
