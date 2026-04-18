@@ -5,9 +5,12 @@ import Combine
 protocol AuthRepository {
     var currentUserId: String? { get }
     var isAuthenticated: Bool { get }
+    var isCurrentUserEmailVerified: Bool { get }
     func signUp(email: String, password: String) async throws -> String
     func signIn(email: String, password: String) async throws -> String
     func signInAsGuest() async throws -> String
+    func sendEmailVerification() async throws
+    func reloadCurrentUser() async throws
     func signOut() throws
     func deleteAccount() async throws
 }
@@ -69,6 +72,7 @@ protocol ReviewRepository {
 // MARK: - User Repository
 protocol UserRepository {
     func fetchProfile(userId: String) async throws -> UserProfile
+    func fetchAllProfiles() async throws -> [UserProfile]
     func createProfile(profile: UserProfile) async throws
     func updateProfile(userId: String, data: [String: Any]) async throws
 }
@@ -79,4 +83,13 @@ protocol DealRepository {
     func addDeal(_ data: [String: Any]) async throws -> String
     func updateDeal(id: String, data: [String: Any]) async throws
     func deleteDeal(id: String) async throws
+}
+
+// MARK: - Notification Repository
+protocol NotificationRepository {
+    func fetchNotifications(userId: String) async throws -> [BuyerNotification]
+    func createNotification(_ notification: BuyerNotification) async throws
+    func createNotifications(_ notifications: [BuyerNotification]) async throws
+    func markAsRead(notificationId: String) async throws
+    func markAllAsRead(userId: String) async throws
 }
