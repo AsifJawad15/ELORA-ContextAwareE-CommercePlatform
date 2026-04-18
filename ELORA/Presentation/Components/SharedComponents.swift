@@ -40,6 +40,7 @@ struct EloraTopBar: View {
     var title: String = "ELORA"
     var showBack: Bool = false
     var onBack: (() -> Void)? = nil
+    var onMenu: (() -> Void)? = nil
     var onSearch: (() -> Void)? = nil
     var onCart: (() -> Void)? = nil
     var cartBadge: Int = 0
@@ -61,11 +62,12 @@ struct EloraTopBar: View {
                         .foregroundColor(style.textColor)
                 }
             } else {
-                Button(action: {}) {
+                Button(action: { onMenu?() }) {
                     Image(systemName: "line.3.horizontal")
                         .font(.system(size: 18, weight: .regular))
                         .foregroundColor(style.textColor)
                 }
+                .disabled(onMenu == nil)
             }
 
             Spacer()
@@ -191,6 +193,15 @@ struct EloraSearchBar: View {
     }
 }
 
+// MARK: - Shared Product Grid
+enum ProductGridLayout {
+    static let spacing: CGFloat = AppSpacing.md
+    static let columns: [GridItem] = [
+        GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: spacing, alignment: .top),
+        GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: spacing, alignment: .top)
+    ]
+}
+
 // MARK: - Loading View
 struct LoadingView: View {
     var message: String = "Loading…"
@@ -295,74 +306,122 @@ struct StarRatingView: View {
 struct ProductTileView: View {
     let product: Product
     let currencyService: CurrencyService
+    var deal: Deal? = nil
     var onTap: (() -> Void)? = nil
     var onFavorite: (() -> Void)? = nil
     var isFavorite: Bool = false
+    private let imageHeight: CGFloat = 180
+    private let cardHeight: CGFloat = 322
+    private let cardShape = RoundedRectangle(cornerRadius: AppRadius.md)
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            // Image
+        VStack(alignment: .leading, spacing: 10) {
             ZStack(alignment: .topTrailing) {
-                AsyncImage(url: URL(string: product.imageUrl ?? "")) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    case .failure:
-                        imageFallback
-                    case .empty:
-                        ProgressView()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    @unknown default:
-                        imageFallback
-                    }
-                }
-                .frame(height: 200)
-                .clipped()
-                .cornerRadius(AppRadius.sm)
+                productImageView
 
-                // Favorite Button
+                if let badgeText = deal?.badgeText {
+                    Text(badgeText)
+                        .font(AppFonts.caption2)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(AppColors.accent)
+                        .cornerRadius(AppRadius.full)
+                        .padding(10)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                }
+
                 if onFavorite != nil {
                     Button(action: { onFavorite?() }) {
                         Image(systemName: isFavorite ? "heart.fill" : "heart")
                             .font(.system(size: 16))
                             .foregroundColor(isFavorite ? AppColors.accent : AppColors.muted)
                             .padding(8)
-                            .background(AppColors.background.opacity(0.6))
+                            .background(AppColors.background.opacity(0.7))
                             .clipShape(Circle())
                     }
                     .padding(8)
                 }
             }
+            .padding(.horizontal, 12)
 
-            // Name
-            Text(product.name)
-                .font(AppFonts.subheadline)
-                .foregroundColor(AppColors.text)
-                .lineLimit(1)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(product.name)
+                    .font(AppFonts.subheadline)
+                    .foregroundColor(AppColors.text)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, minHeight: 42, alignment: .topLeading)
 
-            // Price
-            Text(currencyService.formatted(product.price))
-                .font(AppFonts.footnote)
-                .foregroundColor(AppColors.accent)
+                priceSection
 
-            // Rating
-            if let rating = product.rating {
-                HStack(spacing: 4) {
-                    StarRatingView(rating: rating, size: 10)
-                    if let count = product.reviewCount {
-                        Text("(\(count))")
-                            .font(AppFonts.caption2)
-                            .foregroundColor(AppColors.muted)
+                Group {
+                    if let rating = product.rating {
+                        HStack(spacing: 4) {
+                            StarRatingView(rating: rating, size: 10)
+                            if let count = product.reviewCount {
+                                Text("(\(count))")
+                                    .font(AppFonts.caption2)
+                                    .foregroundColor(AppColors.muted)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                    } else {
+                        Color.clear
                     }
                 }
+                .frame(maxWidth: .infinity, minHeight: 12, alignment: .leading)
+                .clipped()
             }
+            .padding(.horizontal, 12)
+            .padding(.bottom, 12)
+
+            Spacer(minLength: 0)
         }
+        .padding(.top, 12)
+        .frame(maxWidth: .infinity)
+        .frame(height: cardHeight, alignment: .topLeading)
+        .background(
+            cardShape
+                .fill(AppColors.card)
+        )
+        .overlay(
+            cardShape
+                .stroke(AppColors.line, lineWidth: 0.5)
+        )
+        .clipShape(cardShape)
         .contentShape(Rectangle())
         .onTapGesture {
             onTap?()
         }
+    }
+
+    private var productImageView: some View {
+        GeometryReader { proxy in
+            AsyncImage(url: URL(string: product.imageUrl ?? "")) { phase in
+                switch phase {
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                case .failure:
+                    imageFallback
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                case .empty:
+                    ProgressView()
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                @unknown default:
+                    imageFallback
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                }
+            }
+            .background(AppColors.surface)
+            .clipped()
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: imageHeight)
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.md))
     }
 
     private var imageFallback: some View {
@@ -377,5 +436,34 @@ struct ProductTileView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColors.surface)
+    }
+
+    @ViewBuilder
+    private var priceSection: some View {
+        if let discountedPrice = deal?.discountedPrice(for: product.price),
+           discountedPrice < product.price {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(currencyService.formatted(discountedPrice))
+                    .font(AppFonts.footnote)
+                    .foregroundColor(AppColors.accent)
+
+                Text(currencyService.formatted(product.price))
+                    .font(AppFonts.caption)
+                    .foregroundColor(AppColors.muted)
+                    .strikethrough()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, minHeight: 18, alignment: .leading)
+        } else {
+            Text(currencyService.formatted(product.price))
+                .font(AppFonts.footnote)
+                .foregroundColor(AppColors.accent)
+                .lineLimit(1)
+                .minimumScaleFactor(0.9)
+                .frame(maxWidth: .infinity, minHeight: 18, alignment: .leading)
+        }
     }
 }

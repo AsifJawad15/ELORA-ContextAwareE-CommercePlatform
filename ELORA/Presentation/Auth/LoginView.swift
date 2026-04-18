@@ -53,6 +53,14 @@ struct LoginView: View {
                             .padding(.horizontal)
                     }
 
+                    if let info = viewModel.infoMessage {
+                        Text(info)
+                            .font(AppFonts.caption)
+                            .foregroundColor(AppColors.accent)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+
                     // Sign In Button
                     Button(action: {
                         Task { await viewModel.signIn() }
@@ -67,6 +75,17 @@ struct LoginView: View {
                     .buttonStyle(EloraPrimaryButton())
                     .disabled(viewModel.isLoading)
                     .padding(.horizontal, AppSpacing.lg)
+
+                    if viewModel.requiresEmailVerification {
+                        Button(action: {
+                            Task { await viewModel.resendVerificationEmail() }
+                        }) {
+                            Text("RESEND VERIFICATION EMAIL")
+                        }
+                        .buttonStyle(EloraOutlineButton())
+                        .disabled(viewModel.isLoading)
+                        .padding(.horizontal, AppSpacing.lg)
+                    }
 
                     // Guest
                     Button(action: {

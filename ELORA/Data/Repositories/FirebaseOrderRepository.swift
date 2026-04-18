@@ -12,25 +12,16 @@ final class FirebaseOrderRepository: OrderRepository {
     }
 
     func fetchOrders(userId: String) async throws -> [Order] {
-        // Try compound query first (requires composite index in Firestore)
-        do {
-            let snapshot = try await db.collection(collection)
-                .whereField("userId", isEqualTo: userId)
-                .order(by: "createdAt", descending: true)
-                .getDocuments()
-            return snapshot.documents.compactMap {
-                try? $0.data(as: Order.self)
-            }
-        } catch {
-            // Fallback: query without ordering if index not created yet
-            let snapshot = try await db.collection(collection)
-                .whereField("userId", isEqualTo: userId)
-                .getDocuments()
-            let orders = snapshot.documents.compactMap {
-                try? $0.data(as: Order.self)
-            }
-            return orders.sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
+        // Keep this query index-free for buyer accounts, then sort client-side.
+        let snapshot = try await db.collection(collection)
+            .whereField("userId", isEqualTo: userId)
+            .getDocuments()
+
+        let orders = snapshot.documents.compactMap {
+            try? $0.data(as: Order.self)
         }
+
+        return orders.sorted { ($0.createdAt ?? .distantPast) > ($1.createdAt ?? .distantPast) }
     }
 
     func fetchOrder(id: String) async throws -> Order {

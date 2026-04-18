@@ -3,6 +3,7 @@ import SwiftUI
 struct CartView: View {
     @ObservedObject var cartVM: CartViewModel
     @ObservedObject var currencyService: CurrencyService
+    var onMenu: (() -> Void)? = nil
     var onCheckout: () -> Void
     var onContinueShopping: () -> Void
 
@@ -12,7 +13,7 @@ struct CartView: View {
 
             VStack(spacing: 0) {
                 // Header
-                EloraTopBar(title: "MY CART")
+                EloraTopBar(title: "MY CART", onMenu: onMenu)
 
                 if cartVM.isLoading {
                     LoadingView()
@@ -127,6 +128,7 @@ struct CartItemRow: View {
                 }
             }
             .frame(width: 80, height: 100)
+            .background(AppColors.surface)
             .clipped()
             .cornerRadius(AppRadius.sm)
 
@@ -158,10 +160,15 @@ struct CartItemRow: View {
 
                 // Quantity controls
                 HStack(spacing: 12) {
-                    Button(action: { onUpdateQuantity(item.quantity - 1) }) {
+                    Button(action: {
+                        if item.quantity > 1 {
+                            onUpdateQuantity(item.quantity - 1)
+                        }
+                    }) {
                         Image(systemName: "minus.circle")
-                            .foregroundColor(AppColors.muted)
+                            .foregroundColor(item.quantity <= 1 ? AppColors.muted.opacity(0.3) : AppColors.muted)
                     }
+                    .disabled(item.quantity <= 1)
 
                     Text("\(item.quantity)")
                         .font(AppFonts.subheadline)

@@ -1,6 +1,5 @@
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 final class FirebaseProductRepository: ProductRepository {
 
@@ -10,8 +9,12 @@ final class FirebaseProductRepository: ProductRepository {
     func fetchProducts() async throws -> [Product] {
         let snapshot = try await db.collection(collection)
             .getDocuments()
-        let products = try snapshot.documents.compactMap {
-            try $0.data(as: Product.self)
+        let products = try snapshot.documents.compactMap { document in
+            var product = try document.data(as: Product.self)
+            if product.id?.isEmpty ?? true {
+                product.id = document.documentID
+            }
+            return product
         }
         // Sort client-side so products without createdAt are still included
         return products.sorted {
@@ -26,15 +29,22 @@ final class FirebaseProductRepository: ProductRepository {
         let snapshot = try await db.collection(collection)
             .whereField("categoryId", isEqualTo: category.lowercased())
             .getDocuments()
-        return try snapshot.documents.compactMap {
-            try $0.data(as: Product.self)
+        return try snapshot.documents.compactMap { document in
+            var product = try document.data(as: Product.self)
+            if product.id?.isEmpty ?? true {
+                product.id = document.documentID
+            }
+            return product
         }
     }
 
     func fetchProduct(id: String) async throws -> Product {
         let doc = try await db.collection(collection).document(id).getDocument()
-        guard let product = try? doc.data(as: Product.self) else {
+        guard var product = try? doc.data(as: Product.self) else {
             throw RepositoryError.notFound
+        }
+        if product.id?.isEmpty ?? true {
+            product.id = doc.documentID
         }
         return product
     }
@@ -56,8 +66,12 @@ final class FirebaseProductRepository: ProductRepository {
             .whereField("isFeatured", isEqualTo: true)
             .limit(to: 10)
             .getDocuments()
-        let featured = try snapshot.documents.compactMap {
-            try $0.data(as: Product.self)
+        let featured = try snapshot.documents.compactMap { document in
+            var product = try document.data(as: Product.self)
+            if product.id?.isEmpty ?? true {
+                product.id = document.documentID
+            }
+            return product
         }
         // If no featured flag set, return first 10
         if featured.isEmpty {

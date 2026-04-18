@@ -72,11 +72,19 @@ struct SignUpView: View {
                             .padding(.horizontal)
                     }
 
+                    if let info = viewModel.infoMessage {
+                        Text(info)
+                            .font(AppFonts.caption)
+                            .foregroundColor(AppColors.accent)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+
                     // Sign Up Button
                     Button(action: {
                         Task {
-                            await viewModel.signUp()
-                            if viewModel.isAuthenticated {
+                            let didSendVerification = await viewModel.signUp()
+                            if didSendVerification {
                                 isPresented = false
                             }
                         }

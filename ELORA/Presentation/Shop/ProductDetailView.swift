@@ -138,7 +138,8 @@ struct ProductDetailView: View {
                 AppColors.surface
             }
         }
-        .frame(height: 440)
+        .frame(maxWidth: .infinity, minHeight: 440, maxHeight: 440)
+        .background(AppColors.surface)
         .clipped()
         .padding(.top, 50)
     }
