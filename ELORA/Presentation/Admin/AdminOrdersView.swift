@@ -34,7 +34,8 @@ struct AdminOrdersView: View {
             HStack(spacing: 12) {
                 orderStat("Total", "\(viewModel.orders.count)", AppColors.accent)
                 orderStat("Pending", "\(viewModel.orders.filter { $0.status == .pending }.count)", AppColors.warning)
-                orderStat("Shipped", "\(viewModel.orders.filter { $0.status == .shipped }.count)", .blue)
+                orderStat("Packing", "\(viewModel.orders.filter { $0.status == .packing }.count)", AppColors.accent)
+                orderStat("Shipping", "\(viewModel.orders.filter { $0.status == .shipping }.count)", .blue)
                 orderStat("Delivered", "\(viewModel.orders.filter { $0.status == .delivered }.count)", AppColors.success)
             }
             .padding(.horizontal, AppSpacing.lg)
@@ -191,17 +192,15 @@ struct AdminOrderCard: View {
                     .font(AppFonts.caption2)
                     .foregroundColor(AppColors.muted)
 
-                ForEach(OrderStatus.allCases, id: \.rawValue) { status in
-                    if status != order.status {
-                        Button(action: { onUpdateStatus(status) }) {
-                            Text(status.displayName)
-                                .font(AppFonts.caption2)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(AppColors.card)
-                                .foregroundColor(AppColors.text)
-                                .cornerRadius(4)
-                        }
+                ForEach(order.status.nextAllowedStatuses, id: \.rawValue) { status in
+                    Button(action: { onUpdateStatus(status) }) {
+                        Text(status.displayName)
+                            .font(AppFonts.caption2)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(AppColors.card)
+                            .foregroundColor(AppColors.text)
+                            .cornerRadius(4)
                     }
                 }
 
@@ -227,7 +226,8 @@ struct AdminOrderCard: View {
         switch order.status {
         case .pending: return AppColors.warning
         case .confirmed: return AppColors.accent
-        case .shipped: return .blue
+        case .packing: return AppColors.accent
+        case .shipping: return .blue
         case .delivered: return AppColors.success
         case .cancelled: return AppColors.error
         }

@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 import FirebaseFirestore
 
 @MainActor
@@ -20,17 +21,23 @@ final class AdminViewModel: ObservableObject {
     private let orderRepo: OrderRepository
     private let couponRepo: CouponRepository
     private let dealRepo: DealRepository
+    private let userRepo: UserRepository
+    private let notificationRepo: NotificationRepository
 
     init(
         productRepo: ProductRepository = FirebaseProductRepository(),
         orderRepo: OrderRepository = FirebaseOrderRepository(),
         couponRepo: CouponRepository = FirebaseCouponRepository(),
-        dealRepo: DealRepository = FirebaseDealRepository()
+        dealRepo: DealRepository = FirebaseDealRepository(),
+        userRepo: UserRepository = FirebaseUserRepository(),
+        notificationRepo: NotificationRepository = FirebaseNotificationRepository()
     ) {
         self.productRepo = productRepo
         self.orderRepo = orderRepo
         self.couponRepo = couponRepo
         self.dealRepo = dealRepo
+        self.userRepo = userRepo
+        self.notificationRepo = notificationRepo
     }
 
     // MARK: - Load All Data
@@ -125,15 +132,28 @@ final class AdminViewModel: ObservableObject {
     }
 
     func deleteProduct(id: String) async {
+        clearMessages()
+        guard !id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            errorMessage = "This product is missing its document ID, so it can't be deleted."
+            return
+        }
+
         isLoading = true
+        defer { isLoading = false }
+
         do {
             try await productRepo.deleteProduct(id: id)
-            products.removeAll { $0.id == id }
+            await loadProducts()
+
+            if products.contains(where: { $0.id == id }) {
+                errorMessage = "The delete request completed, but the product is still in Firestore."
+                return
+            }
+
             successMessage = "Product deleted"
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 
     // MARK: - Order Management
@@ -147,15 +167,27 @@ final class AdminViewModel: ObservableObject {
     }
 
     func updateOrderStatus(orderId: String, status: OrderStatus) async {
+        clearMessages()
+        guard let currentOrder = orders.first(where: { $0.id == orderId }) else {
+            errorMessage = "Order not found."
+            return
+        }
+        guard currentOrder.status.canTransition(to: status) else {
+            errorMessage = "Invalid status change from \(currentOrder.status.displayName) to \(status.displayName)."
+            return
+        }
+
         isLoading = true
+        defer { isLoading = false }
+
         do {
             try await orderRepo.updateOrderStatus(orderId: orderId, status: status)
+            try await sendOrderStatusNotification(for: currentOrder, newStatus: status)
             successMessage = "Order status updated"
             await loadOrders()
         } catch {
             errorMessage = error.localizedDescription
         }
-        isLoading = false
     }
 
     func deleteOrder(orderId: String) async {
@@ -196,7 +228,19 @@ final class AdminViewModel: ObservableObject {
         ]
         do {
             let _ = try await couponRepo.addCoupon(data)
+            try await notifyAllBuyers(
+                title: "New Coupon: \(code.uppercased())",
+                message: "Grab \(code.uppercased()) for your next order and save instantly at checkout.",
+                type: .coupon,
+                couponCode: code.uppercased()
+            )
             successMessage = "Coupon added"
+            // Send push notification for new coupon
+            NotificationService.shared.scheduleLocalNotification(
+                title: "New Coupon Available!",
+                body: "Use code \(code.uppercased()) to get a discount on your next order.",
+                delay: 2
+            )
             await loadCoupons()
         } catch {
             errorMessage = error.localizedDescription
@@ -263,7 +307,20 @@ final class AdminViewModel: ObservableObject {
         ]
         do {
             let _ = try await dealRepo.addDeal(data)
+            try await notifyAllBuyers(
+                title: "New Deal: \(title)",
+                message: "\(title) is now live. Check the latest offer before it ends.",
+                type: .deal,
+                dealTitle: title
+            )
             successMessage = "Deal added"
+            // Send push notification for new deal
+            NotificationService.shared.scheduleLocalNotification(
+                title: "New Deal!",
+                body: "\(title) — Up to \(Int(discountPercentage))% off! Limited time only.",
+                delay: 2
+            )
+            NotificationService.shared.scheduleDealReminder(title: title, endsAt: endsAt)
             await loadDeals()
         } catch {
             errorMessage = error.localizedDescription
@@ -308,5 +365,74 @@ final class AdminViewModel: ObservableObject {
     func clearMessages() {
         errorMessage = nil
         successMessage = nil
+    }
+
+    private func notifyAllBuyers(
+        title: String,
+        message: String,
+        type: BuyerNotification.NotificationType,
+        couponCode: String? = nil,
+        dealTitle: String? = nil
+    ) async throws {
+        let profiles = try await userRepo.fetchAllProfiles()
+        let notifications = profiles.compactMap { profile -> BuyerNotification? in
+            guard profile.isAdmin != true, let userId = profile.id else { return nil }
+            return BuyerNotification(
+                userId: userId,
+                title: title,
+                message: message,
+                type: type,
+                couponCode: couponCode,
+                dealTitle: dealTitle,
+                orderId: nil,
+                isRead: false,
+                createdAt: Date()
+            )
+        }
+        try await notificationRepo.createNotifications(notifications)
+    }
+
+    private func sendOrderStatusNotification(for order: Order, newStatus: OrderStatus) async throws {
+        let title: String
+        let message: String
+
+        switch newStatus {
+        case .confirmed:
+            title = "Order Confirmed"
+            message = "Your order \(shortOrderId(order.id)) has been confirmed by the admin."
+        case .packing:
+            title = "Order Packing"
+            message = "Your order \(shortOrderId(order.id)) is now being packed."
+        case .shipping:
+            title = "Order Shipping"
+            message = "Your order \(shortOrderId(order.id)) is on the way."
+        case .delivered:
+            title = "Order Delivered"
+            message = "Your order \(shortOrderId(order.id)) has been delivered."
+        case .cancelled:
+            title = "Order Cancelled"
+            message = "Your order \(shortOrderId(order.id)) was cancelled."
+        case .pending:
+            title = "Order Pending"
+            message = "Your order \(shortOrderId(order.id)) is pending review."
+        }
+
+        let notification = BuyerNotification(
+            userId: order.userId,
+            title: title,
+            message: message,
+            type: .order,
+            couponCode: nil,
+            dealTitle: nil,
+            orderId: order.id,
+            isRead: false,
+            createdAt: Date()
+        )
+
+        try await notificationRepo.createNotification(notification)
+    }
+
+    private func shortOrderId(_ orderId: String?) -> String {
+        "#\(String((orderId ?? "ORDER").prefix(8)))"
     }
 }
