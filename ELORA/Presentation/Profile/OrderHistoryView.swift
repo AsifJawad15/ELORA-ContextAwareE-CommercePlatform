@@ -119,7 +119,8 @@ struct OrderCard: View {
         switch order.status {
         case .pending: return AppColors.warning
         case .confirmed: return AppColors.accent
-        case .shipped: return .blue
+        case .packing: return AppColors.accent
+        case .shipping: return .blue
         case .delivered: return AppColors.success
         case .cancelled: return AppColors.error
         }
