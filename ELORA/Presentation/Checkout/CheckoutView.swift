@@ -7,6 +7,7 @@ struct CheckoutView: View {
     let userId: String
     var onOrderComplete: () -> Void
     var onBack: () -> Void
+    @State private var isGatewayPresented = false
 
     var body: some View {
         ZStack {
@@ -16,8 +17,10 @@ struct CheckoutView: View {
                 OrderSuccessView(
                     orderId: viewModel.orderId ?? "",
                     total: currencyService.formatted(
-                        viewModel.total(subtotal: cartVM.subtotal)
+                        viewModel.placedOrderTotal ?? viewModel.total(subtotal: cartVM.subtotal)
                     ),
+                    paymentMethod: viewModel.paymentMethodTitle,
+                    paymentMessage: viewModel.paymentStatusMessage,
                     onContinue: onOrderComplete
                 )
             } else {
@@ -46,22 +49,41 @@ struct CheckoutView: View {
                         VStack(spacing: AppSpacing.lg) {
                             switch viewModel.currentStep {
                             case .address:
-                                AddressFormView(address: $viewModel.address)
+                                AddressFormView(
+                                    address: $viewModel.address,
+                                    savedAddresses: viewModel.savedAddresses,
+                                    onSelectSavedAddress: { viewModel.applySavedAddress($0) }
+                                )
                             case .payment:
                                 PaymentFormView(
-                                    paymentMethod: $viewModel.paymentMethod,
-                                    cardLastFour: $viewModel.cardLastFour,
+                                    paymentMethod: Binding(
+                                        get: { viewModel.paymentMethod },
+                                        set: { viewModel.selectPaymentMethod($0) }
+                                    ),
                                     couponCode: $viewModel.couponCode,
+                                    paymentMethods: viewModel.availablePaymentMethods,
+                                    claimedCoupons: viewModel.claimedCoupons,
                                     appliedCoupon: viewModel.appliedCoupon,
+                                    isPaymentAuthorized: viewModel.isPaymentAuthorized,
+                                    paymentStatusMessage: viewModel.paymentStatusMessage,
+                                    onSelectCoupon: { coupon in
+                                        viewModel.applyClaimedCoupon(coupon, subtotal: cartVM.subtotal)
+                                    },
                                     onApplyCoupon: {
-                                        Task { await viewModel.applyCoupon() }
+                                        Task {
+                                            await viewModel.applyCoupon(
+                                                userId: userId,
+                                                subtotal: cartVM.subtotal
+                                            )
+                                        }
                                     }
                                 )
                             case .review:
                                 OrderReviewView(
                                     items: cartVM.items,
                                     address: viewModel.address,
-                                    paymentMethod: viewModel.paymentMethod,
+                                    paymentMethod: viewModel.paymentMethodTitle,
+                                    couponCode: viewModel.appliedCoupon?.code,
                                     subtotal: cartVM.subtotal,
                                     shipping: viewModel.shippingCost,
                                     discount: viewModel.discount(for: cartVM.subtotal),
@@ -87,6 +109,32 @@ struct CheckoutView: View {
                     // Bottom Action
                     bottomAction
                 }
+            }
+        }
+        .task {
+            await viewModel.loadCheckoutData(userId: userId)
+        }
+        .fullScreenCover(isPresented: $isGatewayPresented) {
+            if let method = viewModel.selectedPaymentMethod {
+                MockPaymentGatewayView(
+                    method: method,
+                    amountText: currencyService.formatted(viewModel.total(subtotal: cartVM.subtotal)),
+                    orderReference: viewModel.pendingCheckoutReference,
+                    isProcessing: viewModel.isLoading,
+                    errorMessage: viewModel.errorMessage,
+                    onConfirm: { payerReference in
+                        let confirmed = await viewModel.confirmGatewayPayment(
+                            payerReference: payerReference,
+                            subtotal: cartVM.subtotal
+                        )
+                        if confirmed {
+                            viewModel.nextStep()
+                        }
+                        return confirmed
+                    }
+                )
+            } else {
+                EmptyView()
             }
         }
     }
@@ -146,14 +194,22 @@ struct CheckoutView: View {
             Button(action: {
                 switch viewModel.currentStep {
                 case .address:
-                    if viewModel.validateAddress() {
-                        Task { await viewModel.calculateShipping() }
-                        viewModel.nextStep()
+                    if let addressError = viewModel.validateAddressFields() {
+                        viewModel.errorMessage = addressError
                     } else {
-                        viewModel.errorMessage = "Please fill in all required address fields."
+                        Task { await viewModel.calculateShipping(subtotal: cartVM.subtotal) }
+                        viewModel.nextStep()
                     }
                 case .payment:
-                    viewModel.nextStep()
+                    if let paymentError = viewModel.validatePaymentFields() {
+                        viewModel.errorMessage = paymentError
+                    } else if !viewModel.isPaymentAuthorized {
+                        viewModel.errorMessage = nil
+                        isGatewayPresented = true
+                    } else {
+                        viewModel.errorMessage = nil
+                        viewModel.nextStep()
+                    }
                 case .review:
                     Task {
                         await viewModel.placeOrder(

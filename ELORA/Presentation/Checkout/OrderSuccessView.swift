@@ -3,6 +3,8 @@ import SwiftUI
 struct OrderSuccessView: View {
     let orderId: String
     let total: String
+    var paymentMethod: String? = nil
+    var paymentMessage: String? = nil
     var onContinue: () -> Void
 
     var body: some View {
@@ -28,9 +30,10 @@ struct OrderSuccessView: View {
                         .font(AppFonts.title2)
                         .foregroundColor(AppColors.text)
 
-                    Text("Thank you for shopping with ELORA")
+                    Text("Payment successful and waiting for admin confirmation")
                         .font(AppFonts.subheadline)
                         .foregroundColor(AppColors.muted)
+                        .multilineTextAlignment(.center)
                 }
 
                 DiamondDivider(color: AppColors.accent)
@@ -39,13 +42,18 @@ struct OrderSuccessView: View {
                 VStack(spacing: 12) {
                     infoRow("Order ID", value: String(orderId.prefix(12)))
                     infoRow("Total", value: total)
-                    infoRow("Status", value: "Confirmed")
+                    if let paymentMethod, !paymentMethod.isEmpty {
+                        infoRow("Payment", value: paymentMethod)
+                    }
+                    infoRow("Status", value: "Pending Admin Review")
                 }
                 .padding(.horizontal, AppSpacing.xl)
 
-                Text("You will receive a confirmation soon.")
+                Text(paymentMessage ?? "You will receive notifications as the admin confirms, packs, ships, and delivers your order.")
                     .font(AppFonts.caption)
                     .foregroundColor(AppColors.muted)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, AppSpacing.xl)
 
                 Spacer()
 

@@ -4,6 +4,7 @@ struct OrderReviewView: View {
     let items: [CartItem]
     let address: Address
     let paymentMethod: String
+    let couponCode: String?
     let subtotal: Double
     let shipping: Double
     let discount: Double
@@ -64,7 +65,7 @@ struct OrderReviewView: View {
                     .tracking(1.2)
                     .foregroundColor(AppColors.muted)
                 Spacer()
-                Text(paymentMethod == "card" ? "Credit Card" : "Cash on Delivery")
+                Text(paymentMethod)
                     .font(AppFonts.subheadline)
                     .foregroundColor(AppColors.text)
             }
@@ -90,6 +91,18 @@ struct OrderReviewView: View {
                 }
 
                 if discount > 0 {
+                    if let couponCode, !couponCode.isEmpty {
+                        HStack {
+                            Text("Coupon")
+                                .font(AppFonts.subheadline)
+                                .foregroundColor(AppColors.textSecondary)
+                            Spacer()
+                            Text(couponCode.uppercased())
+                                .font(AppFonts.caption)
+                                .foregroundColor(AppColors.accent)
+                        }
+                    }
+
                     HStack {
                         Text("Discount")
                             .font(AppFonts.subheadline)
