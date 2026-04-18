@@ -7,6 +7,8 @@ struct AdminProductsView: View {
     @State private var showAddSheet = false
     @State private var editingProduct: Product?
     @State private var searchText = ""
+    @State private var productToDelete: Product?
+    @State private var showDeleteAlert = false
 
     private var filteredProducts: [Product] {
         if searchText.isEmpty { return viewModel.products }
@@ -61,18 +63,32 @@ struct AdminProductsView: View {
                                 product: product,
                                 onEdit: { editingProduct = product },
                                 onDelete: {
-                                    if let id = product.id {
-                                        Task { await viewModel.deleteProduct(id: id) }
-                                    }
+                                    productToDelete = product
+                                    showDeleteAlert = true
                                 }
                             )
                         }
-
                     }
+                    .animation(.default, value: filteredProducts.count)
                     .padding(.horizontal, AppSpacing.md)
                     .padding(.bottom, 40)
                 }
             }
+        }
+        .alert("Delete Product", isPresented: $showDeleteAlert) {
+            Button("Cancel", role: .cancel) {
+                productToDelete = nil
+            }
+            Button("Delete", role: .destructive) {
+                if let id = productToDelete?.id, !id.isEmpty {
+                    Task { await viewModel.deleteProduct(id: id) }
+                } else {
+                    viewModel.errorMessage = "This product is missing its Firestore document ID, so delete can't run."
+                }
+                productToDelete = nil
+            }
+        } message: {
+            Text("Are you sure you want to delete \"\(productToDelete?.name ?? "this product")\"? This action cannot be undone.")
         }
         .sheet(isPresented: $showAddSheet) {
             AdminProductFormView(viewModel: viewModel, product: nil)
