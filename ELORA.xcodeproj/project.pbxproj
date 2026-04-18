@@ -17,7 +17,6 @@
 		223C6D512F54020700BCC29D /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D502F54020700BCC29D /* FirebaseAnalytics */; };
 		223C6D532F54020700BCC29D /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D522F54020700BCC29D /* FirebaseAuth */; };
 		223C6D552F54020700BCC29D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D542F54020700BCC29D /* FirebaseFirestore */; };
-		223C6D572F54020700BCC29D /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D562F54020700BCC29D /* FirebaseFirestoreSwift */; };
 		223C6D592F54020700BCC29D /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 223C6D582F54020700BCC29D /* FirebaseMessaging */; };
 		2285588D2F5408210034383D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2285588C2F5408210034383D /* GoogleService-Info.plist */; };
 		229598FF2F83655400C3AB2E /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598D72F83655400C3AB2E /* HomeViewModel.swift */; };
@@ -48,9 +47,22 @@
 		229599182F83655400C3AB2E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598F72F83655400C3AB2E /* ProfileView.swift */; };
 		229599192F83655400C3AB2E /* OrderHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598F82F83655400C3AB2E /* OrderHistoryView.swift */; };
 		2295991A2F83655400C3AB2E /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598F92F83655400C3AB2E /* ProfileViewModel.swift */; };
+		EE0000010000000000000001 /* SavedAddressesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0000010000000000000002 /* SavedAddressesView.swift */; };
+		EE0000010000000000000003 /* HelpSupportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE0000010000000000000004 /* HelpSupportView.swift */; };
+		FF0000010000000000000001 /* BuyerNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000010000000000000002 /* BuyerNotification.swift */; };
+		FF0000010000000000000003 /* FirebaseNotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000010000000000000004 /* FirebaseNotificationRepository.swift */; };
+		FF0000010000000000000005 /* AddressEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000010000000000000006 /* AddressEditorView.swift */; };
+		FF0000010000000000000007 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0000010000000000000008 /* NotificationsViewModel.swift */; };
+		FF0000010000000000000009 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF000001000000000000000A /* NotificationsView.swift */; };
+		FF000001000000000000000B /* MockPaymentGatewayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF000001000000000000000C /* MockPaymentGatewayView.swift */; };
 		2295991B2F83655400C3AB2E /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598FB2F83655400C3AB2E /* AppTheme.swift */; };
 		2295991C2F83655400C3AB2E /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598FD2F83655400C3AB2E /* CartViewModel.swift */; };
 		2295991D2F83655400C3AB2E /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229598FE2F83655400C3AB2E /* CartView.swift */; };
+		8DC48BA02F9238A4005D93F1 /* StripePaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC48B9F2F9238A3005D93F1 /* StripePaymentService.swift */; };
+		8DC48BA12F9238A4005D93F1 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC48B9E2F9238A3005D93F1 /* NotificationService.swift */; };
+		8DC48BA22F9238A4005D93F1 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC48B9D2F9238A3005D93F1 /* LocationService.swift */; };
+		DD0000010000000000000001 /* MockPaymentGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0000010000000000000002 /* MockPaymentGateway.swift */; };
+		DD0000010000000000000003 /* MockPaymentGateway.json in Resources */ = {isa = PBXBuildFile; fileRef = DD0000010000000000000004 /* MockPaymentGateway.json */; };
 		BB0000010000000000000001 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000001 /* AppRouter.swift */; };
 		BB0000010000000000000002 /* FirebaseAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000002 /* FirebaseAuthRepository.swift */; };
 		BB0000010000000000000003 /* FirebaseCartRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000010000000000000003 /* FirebaseCartRepository.swift */; };
@@ -137,9 +149,22 @@
 		229598F72F83655400C3AB2E /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		229598F82F83655400C3AB2E /* OrderHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderHistoryView.swift; sourceTree = "<group>"; };
 		229598F92F83655400C3AB2E /* ProfileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		EE0000010000000000000002 /* SavedAddressesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedAddressesView.swift; sourceTree = "<group>"; };
+		EE0000010000000000000004 /* HelpSupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSupportView.swift; sourceTree = "<group>"; };
+		FF0000010000000000000002 /* BuyerNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerNotification.swift; sourceTree = "<group>"; };
+		FF0000010000000000000004 /* FirebaseNotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNotificationRepository.swift; sourceTree = "<group>"; };
+		FF0000010000000000000006 /* AddressEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressEditorView.swift; sourceTree = "<group>"; };
+		FF0000010000000000000008 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		FF000001000000000000000A /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		FF000001000000000000000C /* MockPaymentGatewayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPaymentGatewayView.swift; sourceTree = "<group>"; };
 		229598FB2F83655400C3AB2E /* AppTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		229598FD2F83655400C3AB2E /* CartViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		229598FE2F83655400C3AB2E /* CartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		8DC48B9D2F9238A3005D93F1 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		8DC48B9E2F9238A3005D93F1 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		8DC48B9F2F9238A3005D93F1 /* StripePaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripePaymentService.swift; sourceTree = "<group>"; };
+		DD0000010000000000000002 /* MockPaymentGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPaymentGateway.swift; sourceTree = "<group>"; };
+		DD0000010000000000000004 /* MockPaymentGateway.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = MockPaymentGateway.json; sourceTree = "<group>"; };
 		AA0000010000000000000001 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		AA0000010000000000000002 /* FirebaseAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthRepository.swift; sourceTree = "<group>"; };
 		AA0000010000000000000003 /* FirebaseCartRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseCartRepository.swift; sourceTree = "<group>"; };
@@ -177,7 +202,6 @@
 				223C6D532F54020700BCC29D /* FirebaseAuth in Frameworks */,
 				223C6D592F54020700BCC29D /* FirebaseMessaging in Frameworks */,
 				223C6D552F54020700BCC29D /* FirebaseFirestore in Frameworks */,
-				223C6D572F54020700BCC29D /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +228,7 @@
 				223C6D232F53FB7000BCC29D /* ELORA */,
 				223C6D342F53FB7600BCC29D /* ELORATests */,
 				223C6D3E2F53FB7600BCC29D /* ELORAUITests */,
+				8D0FF9122F92418500AA1F48 /* Frameworks */,
 				223C6D222F53FB7000BCC29D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -335,6 +360,7 @@
 			children = (
 				229598EE2F83655400C3AB2E /* CheckoutView.swift */,
 				229598EF2F83655400C3AB2E /* PaymentFormView.swift */,
+				FF000001000000000000000C /* MockPaymentGatewayView.swift */,
 				229598F02F83655400C3AB2E /* CheckoutViewModel.swift */,
 				229598F12F83655400C3AB2E /* AddressFormView.swift */,
 				229598F22F83655400C3AB2E /* OrderSuccessView.swift */,
@@ -357,6 +383,11 @@
 				229598F72F83655400C3AB2E /* ProfileView.swift */,
 				229598F82F83655400C3AB2E /* OrderHistoryView.swift */,
 				229598F92F83655400C3AB2E /* ProfileViewModel.swift */,
+				EE0000010000000000000002 /* SavedAddressesView.swift */,
+				EE0000010000000000000004 /* HelpSupportView.swift */,
+				FF0000010000000000000006 /* AddressEditorView.swift */,
+				FF0000010000000000000008 /* NotificationsViewModel.swift */,
+				FF000001000000000000000A /* NotificationsView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -376,6 +407,13 @@
 				229598FE2F83655400C3AB2E /* CartView.swift */,
 			);
 			path = Cart;
+			sourceTree = "<group>";
+		};
+		8D0FF9122F92418500AA1F48 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CC0000010000000000000001 /* App */ = {
@@ -404,6 +442,7 @@
 				AA0000010000000000000004 /* FirebaseCouponRepository.swift */,
 				AA0000010000000000000005 /* FirebaseDealRepository.swift */,
 				AA0000010000000000000006 /* FirebaseFavoritesRepository.swift */,
+				FF0000010000000000000004 /* FirebaseNotificationRepository.swift */,
 				AA0000010000000000000007 /* FirebaseOrderRepository.swift */,
 				AA0000010000000000000008 /* FirebaseProductRepository.swift */,
 				AA0000010000000000000009 /* FirebaseReviewRepository.swift */,
@@ -426,6 +465,11 @@
 				AA000001000000000000000C /* APIClient.swift */,
 				AA000001000000000000000D /* CurrencyService.swift */,
 				AA000001000000000000000E /* MockPaymentService.swift */,
+				DD0000010000000000000002 /* MockPaymentGateway.swift */,
+				DD0000010000000000000004 /* MockPaymentGateway.json */,
+				8DC48B9D2F9238A3005D93F1 /* LocationService.swift */,
+				8DC48B9E2F9238A3005D93F1 /* NotificationService.swift */,
+				8DC48B9F2F9238A3005D93F1 /* StripePaymentService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -443,6 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				AA000001000000000000000F /* Address.swift */,
+				FF0000010000000000000002 /* BuyerNotification.swift */,
 				AA0000010000000000000010 /* CartItem.swift */,
 				AA0000010000000000000011 /* Category.swift */,
 				AA0000010000000000000012 /* Coupon.swift */,
@@ -485,7 +530,6 @@
 				223C6D502F54020700BCC29D /* FirebaseAnalytics */,
 				223C6D522F54020700BCC29D /* FirebaseAuth */,
 				223C6D542F54020700BCC29D /* FirebaseFirestore */,
-				223C6D562F54020700BCC29D /* FirebaseFirestoreSwift */,
 				223C6D582F54020700BCC29D /* FirebaseMessaging */,
 			);
 			productName = ELORA;
@@ -536,7 +580,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					223C6D202F53FB7000BCC29D = {
 						CreatedOnToolsVersion = 14.1;
@@ -582,6 +626,7 @@
 				223C6D2C2F53FB7500BCC29D /* Preview Assets.xcassets in Resources */,
 				223C6D292F53FB7500BCC29D /* Assets.xcassets in Resources */,
 				2285588D2F5408210034383D /* GoogleService-Info.plist in Resources */,
+				DD0000010000000000000003 /* MockPaymentGateway.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,6 +672,9 @@
 				BB0000010000000000000009 /* FirebaseReviewRepository.swift in Sources */,
 				229599112F83655400C3AB2E /* CheckoutView.swift in Sources */,
 				2295990F2F83655400C3AB2E /* AdminLoginView.swift in Sources */,
+				8DC48BA02F9238A4005D93F1 /* StripePaymentService.swift in Sources */,
+				8DC48BA12F9238A4005D93F1 /* NotificationService.swift in Sources */,
+				8DC48BA22F9238A4005D93F1 /* LocationService.swift in Sources */,
 				2295991B2F83655400C3AB2E /* AppTheme.swift in Sources */,
 				229599022F83655400C3AB2E /* AuthViewModel.swift in Sources */,
 				BB000001000000000000000A /* FirebaseUserRepository.swift in Sources */,
@@ -637,7 +685,14 @@
 				229598FF2F83655400C3AB2E /* HomeViewModel.swift in Sources */,
 				229599092F83655400C3AB2E /* ShopViewModel.swift in Sources */,
 				229599182F83655400C3AB2E /* ProfileView.swift in Sources */,
+				EE0000010000000000000001 /* SavedAddressesView.swift in Sources */,
+				EE0000010000000000000003 /* HelpSupportView.swift in Sources */,
+				FF0000010000000000000005 /* AddressEditorView.swift in Sources */,
+				FF0000010000000000000007 /* NotificationsViewModel.swift in Sources */,
+				FF0000010000000000000009 /* NotificationsView.swift in Sources */,
 				BB000001000000000000000E /* MockPaymentService.swift in Sources */,
+				DD0000010000000000000001 /* MockPaymentGateway.swift in Sources */,
+				FF000001000000000000000B /* MockPaymentGatewayView.swift in Sources */,
 				2295991D2F83655400C3AB2E /* CartView.swift in Sources */,
 				BB000001000000000000000F /* Address.swift in Sources */,
 				2295990A2F83655400C3AB2E /* AdminDashboardView.swift in Sources */,
@@ -657,9 +712,11 @@
 				BB0000010000000000000014 /* Deal.swift in Sources */,
 				2295990B2F83655400C3AB2E /* AdminOrdersView.swift in Sources */,
 				BB0000010000000000000015 /* FavoriteItem.swift in Sources */,
+				FF0000010000000000000003 /* FirebaseNotificationRepository.swift in Sources */,
 				229599192F83655400C3AB2E /* OrderHistoryView.swift in Sources */,
 				BB0000010000000000000016 /* Order.swift in Sources */,
 				BB0000010000000000000017 /* Product.swift in Sources */,
+				FF0000010000000000000001 /* BuyerNotification.swift in Sources */,
 				BB0000010000000000000018 /* Review.swift in Sources */,
 				BB0000010000000000000019 /* UserProfile.swift in Sources */,
 				229599122F83655400C3AB2E /* PaymentFormView.swift in Sources */,
@@ -737,6 +794,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -756,6 +814,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -797,6 +856,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -809,6 +869,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -826,6 +887,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ELORA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ELORA uses your location to fill your shipping address during checkout.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -839,7 +901,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -855,6 +917,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ELORA/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "ELORA uses your location to fill your shipping address during checkout.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -868,7 +931,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -876,7 +939,6 @@
 		223C6D492F53FB7600BCC29D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -886,7 +948,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORATests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ELORA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ELORA";
 			};
@@ -895,7 +957,6 @@
 		223C6D4A2F53FB7600BCC29D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -905,7 +966,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORATests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ELORA.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ELORA";
 			};
@@ -914,7 +975,6 @@
 		223C6D4C2F53FB7600BCC29D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -922,7 +982,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORAUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ELORA;
 			};
@@ -931,7 +991,6 @@
 		223C6D4D2F53FB7600BCC29D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -939,7 +998,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ios.ELORAUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.7;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = ELORA;
 			};
@@ -991,8 +1050,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
-				kind = exactVersion;
-				version = 9.6.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1012,11 +1071,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 223C6D4F2F54020700BCC29D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
-		};
-		223C6D562F54020700BCC29D /* FirebaseFirestoreSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 223C6D4F2F54020700BCC29D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestoreSwift;
 		};
 		223C6D582F54020700BCC29D /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;

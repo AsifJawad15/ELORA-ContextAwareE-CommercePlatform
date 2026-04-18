@@ -8,6 +8,9 @@ enum AppDestination: Equatable {
     case cart
     case checkout
     case orderHistory
+    case notifications
+    case savedAddresses
+    case helpSupport
     case orderSuccess(String)
 }
 
@@ -25,8 +28,14 @@ extension AppDestination: Hashable {
             hasher.combine(3)
         case .orderHistory:
             hasher.combine(4)
-        case .orderSuccess(let id):
+        case .notifications:
             hasher.combine(5)
+        case .savedAddresses:
+            hasher.combine(6)
+        case .helpSupport:
+            hasher.combine(7)
+        case .orderSuccess(let id):
+            hasher.combine(8)
             hasher.combine(id)
         }
     }
@@ -78,53 +87,75 @@ struct MainTabView: View {
 
     @State private var selectedTab: AppTab = .home
     @State private var navigationPath = NavigationPath()
+    @State private var isSidebarOpen = false
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            ZStack(alignment: .bottom) {
-                // Tab Content
-                Group {
-                    switch selectedTab {
-                    case .home:
-                        HomeView(
-                            currencyService: currencyService,
-                            cartVM: cartVM,
-                            onProduct: { navigateTo(.productDetail($0)) },
-                            onSearch: { selectedTab = .shop },
-                            onCart: { navigateTo(.cart) }
-                        )
-                    case .shop:
-                        ShopView(
-                            currencyService: currencyService,
-                            cartVM: cartVM,
-                            favoritesVM: favoritesVM,
-                            onProduct: { navigateTo(.productDetail($0)) },
-                            onCart: { navigateTo(.cart) }
-                        )
-                    case .favorites:
-                        FavoritesView(
-                            favoritesVM: favoritesVM,
-                            cartVM: cartVM,
-                            currencyService: currencyService,
-                            onProduct: { navigateTo(.productDetail($0)) }
-                        )
-                    case .profile:
-                        ProfileView(
-                            authVM: authVM,
-                            currencyService: currencyService,
-                            onOrderHistory: { navigateTo(.orderHistory) }
-                        )
+        ZStack(alignment: .leading) {
+            NavigationStack(path: $navigationPath) {
+                ZStack(alignment: .bottom) {
+                    Group {
+                        switch selectedTab {
+                        case .home:
+                            HomeView(
+                                currencyService: currencyService,
+                                cartVM: cartVM,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onMenu: toggleSidebar,
+                                onSearch: { selectTab(.shop) },
+                                onCart: { navigateTo(.cart) }
+                            )
+                        case .shop:
+                            ShopView(
+                                currencyService: currencyService,
+                                cartVM: cartVM,
+                                favoritesVM: favoritesVM,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onMenu: toggleSidebar,
+                                onCart: { navigateTo(.cart) }
+                            )
+                        case .favorites:
+                            FavoritesView(
+                                favoritesVM: favoritesVM,
+                                cartVM: cartVM,
+                                currencyService: currencyService,
+                                onProduct: { navigateTo(.productDetail($0)) },
+                                onMenu: toggleSidebar
+                            )
+                        case .profile:
+                            ProfileView(
+                                authVM: authVM,
+                                currencyService: currencyService,
+                                onMenu: toggleSidebar,
+                                onOrderHistory: { navigateTo(.orderHistory) },
+                                onNotifications: { navigateTo(.notifications) },
+                                onSavedAddresses: { navigateTo(.savedAddresses) },
+                                onHelpSupport: { navigateTo(.helpSupport) }
+                            )
+                        }
                     }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                // Custom Tab Bar
-                customTabBar
+                    customTabBar
+                }
+                .navigationDestination(for: AppDestination.self) { dest in
+                    destinationView(dest)
+                }
             }
-            .navigationDestination(for: AppDestination.self) { dest in
-                destinationView(dest)
+            if isSidebarOpen {
+                Color.black.opacity(0.45)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        closeSidebar()
+                    }
+                    .transition(.opacity)
+            }
+
+            if isSidebarOpen {
+                sidebarMenu
+                    .transition(.move(edge: .leading).combined(with: .opacity))
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: isSidebarOpen)
         // Cleanest fix — works for iOS 16 and below
         .onChange(of: authVM.userId) { newValue in
             cartVM.setUser(newValue)
@@ -139,7 +170,33 @@ struct MainTabView: View {
     // MARK: - Navigation
 
     private func navigateTo(_ destination: AppDestination) {
+        closeSidebar()
         navigationPath.append(destination)
+    }
+
+    private func selectTab(_ tab: AppTab) {
+        selectedTab = tab
+        navigationPath = NavigationPath()
+        closeSidebar()
+    }
+
+    private func showCart() {
+        navigationPath = NavigationPath()
+        closeSidebar()
+        navigationPath.append(AppDestination.cart)
+    }
+
+    private func toggleSidebar() {
+        withAnimation(.easeInOut(duration: 0.25)) {
+            isSidebarOpen.toggle()
+        }
+    }
+
+    private func closeSidebar() {
+        guard isSidebarOpen else { return }
+        withAnimation(.easeInOut(duration: 0.25)) {
+            isSidebarOpen = false
+        }
     }
 
     @ViewBuilder
@@ -162,6 +219,7 @@ struct MainTabView: View {
                 cartVM: cartVM,
                 favoritesVM: favoritesVM,
                 onProduct: { navigateTo(.productDetail($0)) },
+                onMenu: toggleSidebar,
                 onCart: { navigateTo(.cart) }
             )
             .toolbar(.hidden, for: .navigationBar)
@@ -170,7 +228,17 @@ struct MainTabView: View {
             CartView(
                 cartVM: cartVM,
                 currencyService: currencyService,
-                onCheckout: { navigateTo(.checkout) },
+                onMenu: toggleSidebar,
+                onCheckout: {
+                    guard !authVM.isGuest else {
+                        authVM.errorMessage = "Please sign in to place an order."
+                        authVM.signOut()
+                        navigationPath = NavigationPath()
+                        selectedTab = .home
+                        return
+                    }
+                    navigateTo(.checkout)
+                },
                 onContinueShopping: { navigationPath.removeLast() }
             )
             .toolbar(.hidden, for: .navigationBar)
@@ -197,6 +265,26 @@ struct MainTabView: View {
             )
             .toolbar(.hidden, for: .navigationBar)
 
+        case .notifications:
+            NotificationsView(
+                userId: authVM.userId ?? "",
+                onBack: { navigationPath.removeLast() }
+            )
+            .toolbar(.hidden, for: .navigationBar)
+
+        case .savedAddresses:
+            SavedAddressesView(
+                userId: authVM.userId ?? "",
+                onBack: { navigationPath.removeLast() }
+            )
+            .toolbar(.hidden, for: .navigationBar)
+
+        case .helpSupport:
+            HelpSupportView(
+                onBack: { navigationPath.removeLast() }
+            )
+            .toolbar(.hidden, for: .navigationBar)
+
         case .orderSuccess(let orderId):
             OrderSuccessView(
                 orderId: orderId,
@@ -215,7 +303,7 @@ struct MainTabView: View {
     private var customTabBar: some View {
         HStack(spacing: 0) {
             ForEach(AppTab.allCases, id: \.rawValue) { tab in
-                Button(action: { selectedTab = tab }) {
+                Button(action: { selectTab(tab) }) {
                     VStack(spacing: 4) {
                         ZStack(alignment: .topTrailing) {
                             Image(systemName: selectedTab == tab ? tab.selectedIcon : tab.icon)
@@ -251,5 +339,98 @@ struct MainTabView: View {
                 .shadow(color: .black.opacity(0.3), radius: 8, y: -2)
                 .ignoresSafeArea(.all, edges: .bottom)
         )
+    }
+
+    private var sidebarMenu: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("ELORA")
+                    .font(AppFonts.tenor(28))
+                    .foregroundColor(AppColors.text)
+
+                Text(authVM.userEmail ?? (authVM.isGuest ? "Guest account" : "Welcome back"))
+                    .font(AppFonts.caption)
+                    .foregroundColor(AppColors.muted)
+            }
+            .padding(.horizontal, AppSpacing.lg)
+            .padding(.top, 72)
+            .padding(.bottom, AppSpacing.lg)
+
+            DiamondDivider(color: AppColors.line)
+                .padding(.horizontal, AppSpacing.md)
+
+            sidebarButton(title: "Home", icon: AppTab.home.icon, isSelected: selectedTab == .home) {
+                selectTab(.home)
+            }
+            sidebarButton(title: "Shop", icon: AppTab.shop.icon, isSelected: selectedTab == .shop) {
+                selectTab(.shop)
+            }
+            sidebarButton(
+                title: "Favorites",
+                icon: AppTab.favorites.icon,
+                isSelected: selectedTab == .favorites
+            ) {
+                selectTab(.favorites)
+            }
+            sidebarButton(title: "Profile", icon: AppTab.profile.icon, isSelected: selectedTab == .profile) {
+                selectTab(.profile)
+            }
+            sidebarButton(title: "My Cart", icon: "bag", badge: cartVM.itemCount) {
+                showCart()
+            }
+
+            Spacer()
+
+            Button(action: { authVM.signOut() }) {
+                HStack(spacing: 12) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .font(.system(size: 16))
+                    Text("Sign Out")
+                        .font(AppFonts.subheadline)
+                }
+                .foregroundColor(AppColors.accent)
+                .padding(.horizontal, AppSpacing.lg)
+                .padding(.vertical, 16)
+            }
+        }
+        .frame(width: 280, alignment: .topLeading)
+        .frame(maxHeight: .infinity, alignment: .topLeading)
+        .background(AppColors.surface)
+        .overlay(alignment: .trailing) {
+            Rectangle()
+                .fill(AppColors.line)
+                .frame(width: 0.5)
+        }
+        .ignoresSafeArea()
+    }
+
+    private func sidebarButton(
+        title: String,
+        icon: String,
+        badge: Int = 0,
+        isSelected: Bool = false,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .font(.system(size: 16))
+                    .frame(width: 20)
+
+                Text(title)
+                    .font(AppFonts.subheadline)
+
+                Spacer()
+
+                if badge > 0 {
+                    BadgeView(count: badge)
+                }
+            }
+            .foregroundColor(isSelected ? AppColors.accent : AppColors.text)
+            .padding(.horizontal, AppSpacing.lg)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(isSelected ? AppColors.card : Color.clear)
+        }
     }
 }

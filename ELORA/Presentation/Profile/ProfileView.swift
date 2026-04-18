@@ -4,14 +4,18 @@ struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @ObservedObject var authVM: AuthViewModel
     @ObservedObject var currencyService: CurrencyService
+    var onMenu: () -> Void
     var onOrderHistory: () -> Void
+    var onNotifications: () -> Void
+    var onSavedAddresses: () -> Void
+    var onHelpSupport: () -> Void
 
     var body: some View {
         ZStack {
             AppColors.background.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                EloraTopBar(title: "PROFILE")
+                EloraTopBar(title: "PROFILE", onMenu: onMenu)
 
                 DiamondDivider(color: AppColors.line)
                     .padding(.horizontal)
@@ -46,10 +50,11 @@ struct ProfileView: View {
                 }
             }
         }
-        .task {
+        .task(id: authVM.userId) {
             if let userId = authVM.userId {
                 await viewModel.loadProfile(userId: userId)
                 await viewModel.loadOrders(userId: userId)
+                await viewModel.loadNotificationCount(userId: userId)
             }
         }
     }
@@ -149,9 +154,19 @@ struct ProfileView: View {
                 onOrderHistory()
             }
             menuRow(icon: "heart", title: "Favorites", badge: 0) {}
-            menuRow(icon: "mappin.and.ellipse", title: "Saved Addresses", badge: 0) {}
-            menuRow(icon: "bell", title: "Notifications", badge: 0) {}
-            menuRow(icon: "questionmark.circle", title: "Help & Support", badge: 0) {}
+            menuRow(
+                icon: "mappin.and.ellipse",
+                title: "Saved Addresses",
+                badge: viewModel.profile?.savedAddresses?.count ?? 0
+            ) {
+                onSavedAddresses()
+            }
+            menuRow(icon: "bell", title: "Notifications", badge: viewModel.unreadNotificationsCount) {
+                onNotifications()
+            }
+            menuRow(icon: "questionmark.circle", title: "Help & Support", badge: 0) {
+                onHelpSupport()
+            }
         }
         .padding(.horizontal, AppSpacing.md)
     }

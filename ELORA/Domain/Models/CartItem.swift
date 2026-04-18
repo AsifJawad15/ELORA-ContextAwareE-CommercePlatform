@@ -1,6 +1,5 @@
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 struct CartItem: Identifiable, Codable {
     @DocumentID var id: String?

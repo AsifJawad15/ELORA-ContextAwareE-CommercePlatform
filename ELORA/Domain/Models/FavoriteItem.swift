@@ -1,6 +1,5 @@
 import Foundation
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 struct FavoriteItem: Identifiable, Codable {
     @DocumentID var id: String?

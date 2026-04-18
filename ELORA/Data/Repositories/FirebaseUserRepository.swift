@@ -14,12 +14,17 @@ final class FirebaseUserRepository: UserRepository {
         return profile
     }
 
+    func fetchAllProfiles() async throws -> [UserProfile] {
+        let snapshot = try await db.collection(collection).getDocuments()
+        return snapshot.documents.compactMap { try? $0.data(as: UserProfile.self) }
+    }
+
     func createProfile(profile: UserProfile) async throws {
         guard let uid = profile.id else { return }
         try db.collection(collection).document(uid).setData(from: profile)
     }
 
     func updateProfile(userId: String, data: [String: Any]) async throws {
-        try await db.collection(collection).document(userId).updateData(data)
+        try await db.collection(collection).document(userId).setData(data, merge: true)
     }
 }
